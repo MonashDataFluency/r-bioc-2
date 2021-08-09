@@ -1,0 +1,10 @@
+---
+title: "Working with DNA sequences and features in R with Bioconductor (version 2)"
+output:
+    html_document:
+        theme: cerulean
+---
+
+## Workshop material
+
+## Setup
