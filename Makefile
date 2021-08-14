@@ -1,7 +1,11 @@
 
 .PHONY : all
 
-all : docs/index.html
+all : docs/index.html docs/slides.html docs/workshop.html docs/workshop.R
 
 docs/%.html : markdown/%.Rmd
-	Rscript -e 'rmarkdown::render("$<", "all", output_dir="docs")'
+	Rscript -e 'rmarkdown::render("$<", output_dir="docs")'
+
+docs/workshop.R : markdown/workshop.Rmd scripts/purify.py
+	python3 scripts/purify.py <markdown/workshop.Rmd >docs/workshop.R
+

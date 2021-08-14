@@ -1,0 +1,6 @@
+---
+title: "Working with DNA sequences and features in R with Bioconductor (version 2)"
+output:
+    ioslides_presentation:
+        theme: cerulean
+---

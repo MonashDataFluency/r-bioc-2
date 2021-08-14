@@ -1,5 +1,5 @@
 ---
-title: "Working with DNA sequences and features in R with Bioconductor (version 2)"
+title: "Working with DNA sequences and features in R with Bioconductor - version 2"
 output:
     html_document:
         theme: cerulean
@@ -7,4 +7,21 @@ output:
 
 ## Workshop material
 
+* [Slides](slides.html)
+* [Workshop](workshop.html) (or [as a .R file](workshop.R))
+
 ## Setup
+
+## Author
+
+This course has been developed for the [Monash Bioinformatics Platform](https://www.monash.edu/researchinfrastructure/bioinformatics) and [Monash Data Fluency](https://www.monash.edu/data-fluency) by Paul Harrison.
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="CC-BY.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+
+## Source code
+
+* [GitHub repository](https://github.com/MonashDataFluency/r-bioc-2)
+
+<p style="margin-top: 5em; text-align: right">
+<a href="https://www.monash.edu/researchinfrastructure/bioinformatics"><img src="MBP-banner.png" width="675"></a>
+</p>

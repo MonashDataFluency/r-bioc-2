@@ -1,0 +1,25 @@
+---
+title: "Workshop - Working with DNA sequences and features in R with Bioconductor - version 2"
+output:
+    html_document:
+        theme: cerulean
+---
+
+```{r warning=FALSE, message=FALSE}
+library(Biostrings)      # Provides DNAString, DNAStringSet, etc
+library(BSgenome)        # Provides getSeq()
+library(GenomicRanges)   # Provides GRanges containing genomic ranges, etc
+library(GenomicFeatures) # Provides TxDb objects containing genes/transcripts/exons
+library(rtracklayer)     # Provides import() and export()
+library(Gviz)            # Provides plotting of genomic features
+```
+
+```{r}
+readDNAStringSet("Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa.gz")
+```
+
+```{r}
+sessionInfo()
+```
+
+[Home](index.html)
