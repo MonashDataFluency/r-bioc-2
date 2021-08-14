@@ -6,7 +6,7 @@ library(GenomicFeatures) # Provides TxDb objects containing genes/transcripts/ex
 library(rtracklayer)     # Provides import() and export()
 library(Gviz)            # Provides plotting of genomic features
 
-readDNAStringSet("Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa")
+readDNAStringSet("Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa.gz")
 
 sessionInfo()
 
