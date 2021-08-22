@@ -1,0 +1,16 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+
+ce_transcripts <- subset(features, type == "transcript" & transcript_biotype == "protein_coding")
+ce_ends <- resize(ce_transcripts, width=30, fix="end")
+ce_end_seqs <- getSeq(seqs, ce_ends)
+
+# Which contain the canonical PolyAdenylation Signal (PAS)?
+table(vcountPattern("AATAAA", ce_end_seqs))
+```

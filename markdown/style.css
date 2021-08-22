@@ -1,0 +1,12 @@
+
+.challenge {
+    margin: 4em;
+    padding: 2em;
+    border: 1px solid black;
+    border-radius: 5px;
+    background: #ddf;
+}
+
+.challenge > :first-child, .challenge > :nth-child(2) {
+    margin-top: 0;
+}

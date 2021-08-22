@@ -8,9 +8,48 @@ output:
 ## Workshop material
 
 * [Slides](slides.html)
-* [Workshop](workshop.html) (or [as a .R file](workshop.R))
+* [Workshop](workshop.html)
 
 ## Setup
+
+Download and install:
+
+* [R](https://cloud.r-project.org/) 
+* [RStudio](https://www.rstudio.com/products/rstudio/download/)
+* [Integrative Genome Browser (IGV)](https://software.broadinstitute.org/software/igv/download) (optional)
+
+We recommend creating a new "project" in RStudio for this workshop. This will ensure you are working in a fresh working directory. Once you have opened the project, copy and paste the following code to the R console to download necessary files and install packages. During the workshop we will be working through the code in the file "workshop.R".
+
+```{r eval=FALSE}
+# Download files for workshop
+filenames <- c(
+    "workshop.R", 
+    "Caenorhabditis_elegans.WBcel235.104.gtf.gz", 
+    "Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa.gz")
+
+download.file(
+    paste0("https://monashdatafluency.github.io/r-bioc-2/", filenames),
+    filenames)
+
+
+# Install packages used in workshop
+install.packages("BiocManager")
+BiocManager::install(c(
+    "Biostrings",
+    "BSgenome",
+    "GenomicRanges",
+    "GenomicFeatures",
+    "ensembldb",
+    "rtracklayer",
+    "Gviz",
+    "seqLogo",
+    "AnnotationHub"))
+
+
+# Worm FASTA and GTF files are originally from:
+# http://ftp.ensembl.org/pub/release-104/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa.gz
+# http://ftp.ensembl.org/pub/release-104/gtf/caenorhabditis_elegans/Caenorhabditis_elegans.WBcel235.104.gtf.gz
+```
 
 ## Author
 

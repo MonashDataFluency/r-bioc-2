@@ -1,7 +1,7 @@
 
 .PHONY : all
 
-all : docs/index.html docs/slides.html docs/workshop.html docs/workshop.R
+all : docs/workshop.R docs/index.html docs/slides.html docs/workshop.html
 
 docs/%.html : markdown/%.Rmd
 	Rscript -e 'rmarkdown::render("$<", output_dir="docs")'
