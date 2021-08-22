@@ -51,6 +51,17 @@ BiocManager::install(c(
 # http://ftp.ensembl.org/pub/release-104/gtf/caenorhabditis_elegans/Caenorhabditis_elegans.WBcel235.104.gtf.gz
 ```
 
+
+## Further reading
+
+Most of the packages used in this workshop have vignettes that are worth reading.
+
+For a "tidy" approach to GRanges, check out Stuart Lee's [plyranges](https://bioconductor.org/packages/release/bioc/html/plyranges.html) package. Stuart has also written an introduction to [S4 classes](https://stuartlee.org/2019/07/09/s4-short-guide/).
+
+James MacDonald and Lori Sheppard gave an introduction to Bioconductor annotation resources at Bioc2021: [video](https://www.youtube.com/watch?v=3ABBm7BZszI), [workshop material](https://jmacdon.github.io/Bioc2021Anno/articles/AnnotationWorkshop.html). Good discussion of Bioconductor history.
+
+
+
 ## Author
 
 This course has been developed for the [Monash Bioinformatics Platform](https://www.monash.edu/researchinfrastructure/bioinformatics) and [Monash Data Fluency](https://www.monash.edu/data-fluency) by Paul Harrison.

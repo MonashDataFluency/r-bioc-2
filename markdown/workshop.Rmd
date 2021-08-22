@@ -292,20 +292,6 @@ Notice the slightly different chromosome lengths! Features from one genome versi
 Our ENSEMBL sequences match "ce11", also called "WBcel235". However the chromosome names are slightly different, a common source of pain. See `?seqlevelsStyle()`.
 
 
-# Getting sequences
-
-We can use these annotations to grab sequences from the genome.
-
-```{r}
-feat <- features[4]
-feat
-feat_seq <- getSeq(seqs, feat)
-feat_seq
-translate(feat_seq)
-```
-
-This only works for this particular gene because there are no introns. More on this later.
-
 
 # Querying GRanges objects
 
@@ -370,7 +356,7 @@ Various useful manipulations of individual ranges are defined.
 ?"intra-range-methods"
 ```
 
-Note: How these make use of the strand is a little haphazard. For example flank() and resize() respect strand but shift() does not.
+Note: How these make use of the strand is a little haphazard. For example `flank()` and `resize()` respect strand but `shift()` does not.
 
 Earlier we translated a coding sequence. Coding sequences are terminated by a stop codon. Let's extend the CDS feature to include this.
 
@@ -454,6 +440,88 @@ look( disjoin(trx1_exons) )
 ```
 
 
+# Example: Examining the PolyAdenylation Signal (PAS)
+
+Say we suspect there is some motif that causes cleavage and polyadenylation of RNA transcripts, close to the 3' end of each transcript. Bioconductor will let us explore sequence around the ends of transcripts. It can also serve as to prepare data for command-line software such as the MEME Suite.
+
+We'll limit our attention to protein coding transcripts.
+
+```{r}
+ce_transcripts <- subset(features, type == "transcript" & transcript_biotype == "protein_coding")
+
+ce_ends <- resize(ce_transcripts, width=30, fix="end")
+ce_end_seqs <- getSeq(seqs, ce_ends)
+names(ce_end_seqs) <- ce_ends$transcript_id
+
+writeXStringSet(ce_end_seqs, "ce_end_seqs.fasta")
+```
+
+This is suitable for use with, for example, the `streme` tool from MEME.
+
+```
+# streme --rna --minw 4 --maxw 15 --p ce_end_seqs.fasta
+```
+
+Ok, so actually it is well known that there is a PolyAdenylation Signal (PAS) motif, canonically "AAUAAA". Let's look for this known motif.
+
+```{r}
+# Which contain the canonical PAS?
+counts <- vcountPattern("AATAAA", ce_end_seqs)
+table(counts)
+```
+
+We could also look for this pattern in the genome in general. Here is some code to find matches on either strand, using `vmatchPattern()`.
+
+```{r}
+query <- DNAString("AATAAA")
+max.mismatch <- 0
+
+fwd <- vmatchPattern(query, seqs, max.mismatch=max.mismatch)
+fwd <- as(fwd, "GRanges")
+strand(fwd) <- "+"
+
+rev <- vmatchPattern(reverseComplement(query), seqs, max.mismatch=max.mismatch)
+rev <- as(rev, "GRanges")
+strand(rev) <- "-"
+
+matches <- c(fwd, rev)
+matches
+```
+
+Once we have a set of ranges, they can be related to other sets of ranges. For example, to reproduce the earlier result:
+
+```{r}
+overlaps <- findOverlaps(matches, ce_ends, type="within")
+table(table( subjectHits(overlaps) ))
+```
+
+The matches can be examined in IGV if save in a GFF file.
+
+```{r}
+export(matches, "motif-matches.gff")
+```
+
+The `pairwiseAlignment()` function provides more flexibility if needed. Command-line tools such as BLAST may be faster.
+
+Similar exploration can be performed around other regions of interest, such as peaks identified from ChIP. R will either provide a complete solution, or serve as the glue plugging command-line tools together.
+
+* Do simple searches from within R.
+* Do more complex motif searching or alignment externally, then load into R.
+* Build up different sets of genomic ranges, and use R to compare them to each other.
+
+.
+
+.
+
+.
+
+At this point, your brain should be full. We now want to touch lightly on some further facilities of Bioconductor without going into too much detail.
+
+.
+
+.
+
+.
 
 # Transcript database objects
 

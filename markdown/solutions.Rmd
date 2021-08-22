@@ -10,7 +10,26 @@ editor_options:
 ce_transcripts <- subset(features, type == "transcript" & transcript_biotype == "protein_coding")
 ce_ends <- resize(ce_transcripts, width=30, fix="end")
 ce_end_seqs <- getSeq(seqs, ce_ends)
+names(ce_end_seqs) <- ce_ends$transcript_id
 
 # Which contain the canonical PolyAdenylation Signal (PAS)?
 table(vcountPattern("AATAAA", ce_end_seqs))
+
+export(ce_end_seqs, "end_seqs.fasta")
+# streme --rna --minw 4 --maxw 15 --p end_seqs.fasta
+## --rna = look for single-stranded motifs
+
+
+ce_abouts <- resize(resize(ce_transcripts, width=150, fix="end"), width=300, fix="start")
+ce_about_seqs <- getSeq(seqs, ce_abouts)
+names(ce_about_seqs) <- ce_abouts$transcript_id
+export(ce_about_seqs, "about_seqs.fasta")
+
+# streme --rna --minw 4 --maxw 15 --p about_seqs.fasta --o streme_about_out
+
+# centrimo about_seqs.fasta streme_out/streme.xml --local --norc
+# centrimo about_seqs.fasta streme_about_out/streme.xml --local --norc
+# centrimo about_seqs.fasta ~/meme/motif_databases/WORM/uniprobe_worm.meme --local --norc
+# centrimo about_seqs.fasta ~/meme/motif_databases/JASPAR/JASPAR2018_CORE_nematodes_non-redundant.meme --local --norc
+
 ```
