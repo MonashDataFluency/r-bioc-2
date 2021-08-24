@@ -55,6 +55,7 @@ library(GenomicRanges)   # Provides GRanges containing genomic ranges, etc
 library(GenomicFeatures) # Provides TxDb objects containing genes/transcripts/exons
 library(rtracklayer)     # Provides import() and export()
 library(Gviz)            # Provides plotting of genomic features
+library(seqLogo)         # Provides sequence logo plots for motifs, etc
 ```
 
 
@@ -452,7 +453,20 @@ ce_transcripts <- subset(features, type == "transcript" & transcript_biotype == 
 ce_ends <- resize(ce_transcripts, width=30, fix="end")
 ce_end_seqs <- getSeq(seqs, ce_ends)
 names(ce_end_seqs) <- ce_ends$transcript_id
+```
 
+We can check for general biasses in base composition:
+
+```{r}
+letter_counts <- consensusMatrix(ce_end_seqs)
+probs <- prop.table(letter_counts[1:4,], 2)
+seqLogo(probs, ic.scale=FALSE)
+seqLogo(probs)
+```
+
+Saving the sequences to a file lets us apply command-line tools:
+
+```{r}
 writeXStringSet(ce_end_seqs, "ce_end_seqs.fasta")
 ```
 
@@ -505,23 +519,53 @@ The `pairwiseAlignment()` function provides more flexibility if needed. Command-
 
 Similar exploration can be performed around other regions of interest, such as peaks identified from ChIP. R will either provide a complete solution, or serve as the glue plugging command-line tools together.
 
-* Do simple searches from within R.
-* Do more complex motif searching or alignment externally, then load into R.
-* Build up different sets of genomic ranges, and use R to compare them to each other.
 
-.
 
-.
+# BAMs and Bigwigs
 
-.
+`import()` can read various other file types. This section will demonstrate reading read alignments from a BAM file and producing a Bigwig depth of coverage file. The reads in the BAM file used here are a small sample from GSE57993 sample "N2 Rep1". https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE57993
 
-At this point, your brain should be full. We now want to touch lightly on some further facilities of Bioconductor without going into too much detail.
+Both BAM and Bigwig files are designed so that specific regions can be accessed efficiently. Genome browsers can use this to only load data as needed. Bioconductor packages will also usually offer some way to load specific regions. This is useful because these can be very large files.
 
-.
+```{r}
+alignments <- import("example.bam")
+alignments
 
-.
+depth <- coverage(alignments)
+depth
 
-.
+# Depth of coverage for gene rps-12
+plot(depth$III[5679200:5680200], type="l")
+
+export(depth, "depth.bw")
+```
+
+Explore the documentation for "GenomicAlignments", "Rle", and "RleList". "Rle" and "RleList" objects are memory-efficient vectors and lists of vectors. They support arithmetic operation such as scaling with `*` and adding with `+`. Rather neat! 
+
+Sometimes a function won't support "Rle"s. When this happens, an Rle can be converted to a conventional vector with `as.numeric()`.
+
+Filtered import ofa BAM file can be performed with a suitable use of ScanBamParam, `import(bam, param=ScanBamParam( ... ))`:
+
+* Specific strand.
+* Specific region of reference genome.
+* Specific set of single cells, based on CB attribute.
+
+Try loading the "motif-matches.gff", "example.bam", and "depth.bw" files into IGV. Look for example at gene "rps-12".
+
+
+...
+
+...
+
+...
+
+At this point, your brain should be full. We now want to finish be touching lightly on some further facilities of Bioconductor without going into too much detail.
+
+...
+
+...
+
+...
 
 # Transcript database objects
 

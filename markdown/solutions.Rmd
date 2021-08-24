@@ -15,6 +15,14 @@ names(ce_end_seqs) <- ce_ends$transcript_id
 # Which contain the canonical PolyAdenylation Signal (PAS)?
 table(vcountPattern("AATAAA", ce_end_seqs))
 
+library(seqLogo)
+letter_counts <- consensusMatrix(ce_end_seqs)
+probs <- prop.table(letter_counts[1:4,], 2)
+seqLogo(probs, ic.scale=FALSE)
+seqLogo(probs)
+
+
+
 export(ce_end_seqs, "end_seqs.fasta")
 # streme --rna --minw 4 --maxw 15 --p end_seqs.fasta
 ## --rna = look for single-stranded motifs
@@ -24,6 +32,11 @@ ce_abouts <- resize(resize(ce_transcripts, width=150, fix="end"), width=300, fix
 ce_about_seqs <- getSeq(seqs, ce_abouts)
 names(ce_about_seqs) <- ce_abouts$transcript_id
 export(ce_about_seqs, "about_seqs.fasta")
+
+letter_counts <- consensusMatrix(ce_about_seqs)
+probs <- prop.table(letter_counts[1:4,], 2)
+seqLogo(probs, ic.scale=FALSE)
+seqLogo(probs)
 
 # streme --rna --minw 4 --maxw 15 --p about_seqs.fasta --o streme_about_out
 

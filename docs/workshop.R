@@ -45,6 +45,7 @@ library(GenomicRanges)   # Provides GRanges containing genomic ranges, etc
 library(GenomicFeatures) # Provides TxDb objects containing genes/transcripts/exons
 library(rtracklayer)     # Provides import() and export()
 library(Gviz)            # Provides plotting of genomic features
+library(seqLogo)         # Provides sequence logo plots for motifs, etc
 
 
 
@@ -461,6 +462,15 @@ ce_ends <- resize(ce_transcripts, width=30, fix="end")
 ce_end_seqs <- getSeq(seqs, ce_ends)
 names(ce_end_seqs) <- ce_ends$transcript_id
 
+# We can check for general biasses in base composition:
+
+letter_counts <- consensusMatrix(ce_end_seqs)
+probs <- prop.table(letter_counts[1:4,], 2)
+seqLogo(probs, ic.scale=FALSE)
+seqLogo(probs)
+
+# Saving the sequences to a file lets us apply command-line tools:
+
 writeXStringSet(ce_end_seqs, "ce_end_seqs.fasta")
 
 # This is suitable for use with, for example, the streme tool from MEME.
@@ -508,33 +518,73 @@ export(matches, "motif-matches.gff")
 # Similar exploration can be performed around other regions of interest,
 # such as peaks identified from ChIP. R will either provide a complete
 # solution, or serve as the glue plugging command-line tools together.
+
+
+
+#/////////////////////////
+# 11 BAMs and Bigwigs ----
 #
-# * Do simple searches from within R.
-# * Do more complex motif searching or alignment externally, then load
-# into R.
-# * Build up different sets of genomic ranges, and use R to compare them
-# to each other.
+# import() can read various other file types. This section will
+# demonstrate reading read alignments from a BAM file and producing a
+# Bigwig depth of coverage file. The reads in the BAM file used here are
+# a small sample from GSE57993 sample "N2 Rep1".
+# https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE57993
 #
-# .
+# Both BAM and Bigwig files are designed so that specific regions can be
+# accessed efficiently. Genome browsers can use this to only load data
+# as needed. Bioconductor packages will also usually offer some way to
+# load specific regions. This is useful because these can be very large
+# files.
+
+alignments <- import("example.bam")
+alignments
+
+depth <- coverage(alignments)
+depth
+
+# Depth of coverage for gene rps-12
+plot(depth$III[5679200:5680200], type="l")
+
+export(depth, "depth.bw")
+
+# Explore the documentation for "GenomicAlignments", "Rle", and
+# "RleList". "Rle" and "RleList" objects are memory-efficient vectors
+# and lists of vectors. They support arithmetic operation such as
+# scaling with * and adding with +. Rather neat!
 #
-# .
+# Sometimes a function won't support "Rle"s. When this happens, an Rle
+# can be converted to a conventional vector with as.numeric().
 #
-# .
+# Filtered import can be performed with a suitable use of ScanBamParam,
+# import(bam, param=ScanBamParam( ... )):
 #
-# At this point, your brain should be full. We now want to touch lightly
-# on some further facilities of Bioconductor without going into too much
-# detail.
+# * specific strand
+# * specific region of reference genome
+# * specific set of cells, based on BAM attributes
 #
-# .
+# Try loading the "motif-matches.gff", "example.bam", and "depth.bw"
+# files into IGV. Look for example at gene "rps-12".
 #
-# .
+# ...
 #
-# .
+# ...
+#
+# ...
+#
+# At this point, your brain should be full. We now want to finish be
+# touching lightly on some further facilities of Bioconductor without
+# going into too much detail.
+#
+# ...
+#
+# ...
+#
+# ...
 
 
 
 #////////////////////////////////////
-# 11 Transcript database objects ----
+# 12 Transcript database objects ----
 #
 # We've been using our genomic features as one big unstructured GRanges.
 # This is messy. Furthermore, eukaryote genes contain exons and introns.
@@ -570,7 +620,7 @@ cds_seqs
 
 
 #////////////////////////////////////////
-# 12 Genome and annotation resources ----
+# 13 Genome and annotation resources ----
 
 # (return to slideshow)
 
@@ -613,7 +663,7 @@ cds_seqs
 # * alt loci: a way to represent alleles, genetic diversity in the
 # species
 
-# 12.1 Example packages ----
+# 13.1 Example packages ----
 #
 # * *BSgenome.Hsapiens.UCSC.hg38* Biostrings genome, Homo sapiens, from
 # the UCSC browser, version hg38. DNA for chromosomes, usable in the
@@ -633,7 +683,7 @@ cds_seqs
 # However to find which terms apply to specific genes, use the GOALL
 # column in the relevant species' organism database.
 
-# 12.2 biomaRt ----
+# 13.2 biomaRt ----
 #
 # [BioMart](http://www.biomart.org/) servers accessed using the biomaRt
 # package are another way to get information such as translation of gene
@@ -643,7 +693,7 @@ cds_seqs
 # available forever, and BioMart doesn't have a clear story around
 # versioning.
 
-# 12.3 AnnotationHub ----
+# 13.3 AnnotationHub ----
 #
 # AnnotationHub is a way to retrieve data from a more comprehensive set
 # of organisms and data providers than are provided as individual
@@ -704,9 +754,9 @@ select(sc_orgdb, c("ACT1", "COS2"), keytype="GENENAME",  columns=c("ENSEMBL"))
 
 
 #////////////////////
-# 13xxxxxxxxxxxx ----
+# 14xxxxxxxxxxxx ----
 
-# 13.1 Under the hood ----
+# 14.1 Under the hood ----
 #
 # A TxDb is a subclass of AnnotationDb. Under the hood it is an SQLite
 # database.
@@ -733,7 +783,7 @@ AnnotationDbi::select(txdb, key="WBGene00015062", keytype="GENEID",
 # Various other reference information is given by Bioconductor in the
 # form of AnnotationDb objects. We will see some of these later.
 
-# 13.2 Challenge ----
+# 14.2 Challenge ----
 #
 # Get the 30 bases upstrand of the ends of transcripts which have the
 # "protein_coding" biotype.

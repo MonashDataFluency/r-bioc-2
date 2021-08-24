@@ -25,7 +25,9 @@ We recommend creating a new "project" in RStudio for this workshop. This will en
 filenames <- c(
     "workshop.R", 
     "Caenorhabditis_elegans.WBcel235.104.gtf.gz", 
-    "Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa.gz")
+    "Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa.gz",
+    "example.bam",
+    "example.bam.bai")
 
 download.file(
     paste0("https://monashdatafluency.github.io/r-bioc-2/", filenames),
@@ -41,6 +43,7 @@ BiocManager::install(c(
     "GenomicFeatures",
     "ensembldb",
     "rtracklayer",
+    "Rsamtools",
     "Gviz",
     "seqLogo",
     "AnnotationHub"))

@@ -3,6 +3,7 @@
 *_out
 *.fasta
 *.gff
+*.bw
 
 # History files
 .Rhistory

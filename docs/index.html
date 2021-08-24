@@ -385,7 +385,9 @@ pre code {
 filenames &lt;- c(
     &quot;workshop.R&quot;, 
     &quot;Caenorhabditis_elegans.WBcel235.104.gtf.gz&quot;, 
-    &quot;Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa.gz&quot;)
+    &quot;Caenorhabditis_elegans.WBcel235.dna_sm.toplevel.fa.gz&quot;,
+    &quot;example.bam&quot;,
+    &quot;example.bam.bai&quot;)
 
 download.file(
     paste0(&quot;https://monashdatafluency.github.io/r-bioc-2/&quot;, filenames),
@@ -401,6 +403,7 @@ BiocManager::install(c(
     &quot;GenomicFeatures&quot;,
     &quot;ensembldb&quot;,
     &quot;rtracklayer&quot;,
+    &quot;Rsamtools&quot;,
     &quot;Gviz&quot;,
     &quot;seqLogo&quot;,
     &quot;AnnotationHub&quot;))
