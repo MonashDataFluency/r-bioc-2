@@ -5,10 +5,16 @@ output:
         theme: cerulean
 ---
 
+<br>
+
 ## Workshop material
 
+<div style="font-size: 150%">
 * [Slides](slides.html)
 * [Workshop](workshop.html)
+</div>
+
+<br>
 
 ## Setup
 
@@ -57,12 +63,13 @@ BiocManager::install(c(
 
 ## Further reading
 
-Most of the packages used in this workshop have vignettes that are worth reading.
+* Most of the packages used in this workshop have vignettes.
 
-For a "tidy" approach to GRanges, check out Stuart Lee's [plyranges](https://bioconductor.org/packages/release/bioc/html/plyranges.html) package. Stuart has also written an introduction to [S4 classes](https://stuartlee.org/2019/07/09/s4-short-guide/).
+* The [file format FAQ](https://genome.ucsc.edu/FAQ/FAQformat.html) by UCSC. Mentioned in this workshop are GTF, GFF, BAM, bigWig. Also see [FASTA](https://en.wikipedia.org/wiki/FASTA_format) for sequences. [samtools (htslib)](http://www.htslib.org/) can make an index for many of these file types, for fast access by genome browsers and other software.
 
-James MacDonald and Lori Sheppard gave an introduction to Bioconductor annotation resources at Bioc2021: [video](https://www.youtube.com/watch?v=3ABBm7BZszI), [workshop material](https://jmacdon.github.io/Bioc2021Anno/articles/AnnotationWorkshop.html). Good discussion of Bioconductor history.
+* The [plyranges](https://bioconductor.org/packages/release/bioc/html/plyranges.html) package by Stuart Lee provides a "tidy" approach to GRanges. Stuart has also written an introduction to [S4 classes](https://stuartlee.org/2019/07/09/s4-short-guide/).
 
+* James MacDonald and Lori Sheppard gave an introduction to Bioconductor annotation resources at Bioc2021: [video](https://www.youtube.com/watch?v=3ABBm7BZszI), [workshop material](https://jmacdon.github.io/Bioc2021Anno/articles/AnnotationWorkshop.html). Good discussion of Bioconductor history.
 
 
 ## Author

@@ -4,6 +4,30 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Challenge: transcript initiation
+
+```{r}
+transcripts <- subset(features, type == "transcript" & transcript_biotype == "protein_coding")
+flanks <- flank(transcripts, 2, start=TRUE)
+flank_seqs <- getSeq(seqs, flanks)
+table(flank_seqs)
+
+spans <- resize(flank(transcripts, 2), 4)
+# or
+spans <- promoters(transcripts, 2, 2)
+span_seqs <- getSeq(seqs, spans)
+tail(sort(table(span_seqs)), 50)
+
+letter_counts <- consensusMatrix(span_seqs)
+probs <- prop.table(letter_counts[1:4,], 2)
+seqLogo(probs, ic.scale=FALSE)
+seqLogo(probs)
+```
+
+
+
+# Junk
+
 
 ```{r}
 
@@ -45,4 +69,18 @@ seqLogo(probs)
 # centrimo about_seqs.fasta ~/meme/motif_databases/WORM/uniprobe_worm.meme --local --norc
 # centrimo about_seqs.fasta ~/meme/motif_databases/JASPAR/JASPAR2018_CORE_nematodes_non-redundant.meme --local --norc
 
+#ce_transcripts_2 <- subset(features, type == "transcript" & transcript_biotype == "piRNA")
+
+#ce_starts <- resize(flank(ce_transcripts_2, 10), 20)
+ce_starts <- resize(ce_transcripts, 4, fix="start")
+ce_start_seqs <- getSeq(seqs, ce_starts)
+table(ce_start_seqs)
+
+ce_starts <- resize(flank(ce_transcripts, 2), 4)
+ce_start_seqs <- getSeq(seqs, ce_starts)
+table(ce_start_seqs) %>% sort()
+letter_counts <- consensusMatrix(ce_start_seqs)
+probs <- prop.table(letter_counts[1:4,], 2)
+seqLogo(probs, ic.scale=FALSE)
+seqLogo(probs)
 ```

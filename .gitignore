@@ -2,7 +2,7 @@
 *.Rproj
 *_out
 *.fasta
-*.gff
+*.gff*
 *.bw
 
 # History files

@@ -108,7 +108,7 @@ myset$chrII
 # Reverse complement the following DNA sequence and then translate to an
 # amino acid sequence:
 
-GCTTTCGTTTTCGCC
+"GCTTTCGTTTTCGCC"
 #
 
 
@@ -354,6 +354,20 @@ look(trx1_features, trx1_features$type)
 
 #/////////////////////////////////////
 # 9 Further operations on GRanges ----
+#
+# 💡 Using accessor methods like "start()" and "strand()" frees the
+# authors of GRanges to store data internally using whatever efficiency
+# tricks they want, and even to change this in a new version of
+# Bioconductor. This is good, but it can be better:
+#
+# 💡 Double-stranded DNA has a rotational symmetry. None of the physics
+# of DNA is changed if we look at it rotated end-to-end 180 degrees.
+# Labelling of the strands as "+" and "-" is arbitrary. Also, it is
+# usually not the exact position of features in a genome that is
+# important so much as their relative position. If we restrict outselves
+# to using functions that work just as well with either labelling of
+# strands, and that are not affected by absolute position, our code will
+# more directly express our intention and be less prone to bugs.
 
 # 9.1 Intra-range ----
 #
@@ -362,16 +376,17 @@ look(trx1_features, trx1_features$type)
 ?"intra-range-methods"
 
 # Note: How these make use of the strand is a little haphazard. For
-# example flank() and resize() respect strand but shift() does not.
+# example flank(), resize(), and promoters() respect strand but shift()
+# does not.
 #
-# Earlier we translated a coding sequence. Coding sequences are
-# terminated by a stop codon. Let's extend the CDS feature to include
-# this.
+# For example, suppose we are interested in the first two bases of a
+# transcript:
 
-feat <- features[4]
-feat_stop <- resize(feat, width(feat)+3)
-seq_stop <- getSeq(seqs, feat_stop)
-translate(seq_stop)
+feat <- features[2]
+feat_initial <- resize(feat, 2, fix="start")
+
+look( c(feat, feat_initial) )
+getSeq(seqs, feat_initial)
 
 # resize can fix either the fix="start" or fix="end" of the sequence.
 #
@@ -443,12 +458,32 @@ look( range(trx1_exons) )
 look( reduce(trx1_exons) )
 look( disjoin(trx1_exons) )
 
+# 9.3 Challenge: transcript initiation ----
+#
+# 1. Make a GRanges of all transcripts with a biotype of
+# "protein_coding".
+# 2. Make a GRanges of the two bases immediately preceding each of these
+# transcripts.
+# 3. Use this to get the two bases immediately preceding each
+# transcript.
+# 4. Use table() to see if any sequences are particularly common.
+#
+# Advanced: Get the four bases spanning the start of the transcript (two
+# upstrand of the start and two downstrand of the start).
+#
+# Note: In C. elegans the picture is complicated by trans-splicing. I
+# wonder what exactly the 5' ends of these transcript annotations
+# represent?
+#
 
 
 #////////////////////////////////////////////////////////////
 # 10 Example: Examining the PolyAdenylation Signal (PAS) ----
 #
-# Say we suspect there is some motif that causes cleavage and
+# We'll now look at an example where the location of the thing we're
+# looking for is more uncertain.
+#
+# We suspect there is some motif that causes cleavage and
 # polyadenylation of RNA transcripts, close to the 3' end of each
 # transcript. Bioconductor will let us explore sequence around the ends
 # of transcripts. It can also serve as to prepare data for command-line
@@ -456,34 +491,38 @@ look( disjoin(trx1_exons) )
 #
 # We'll limit our attention to protein coding transcripts.
 
-ce_transcripts <- subset(features, type == "transcript" & transcript_biotype == "protein_coding")
+transcripts <- subset(features,
+    type == "transcript" & transcript_biotype == "protein_coding")
 
-ce_ends <- resize(ce_transcripts, width=30, fix="end")
-ce_end_seqs <- getSeq(seqs, ce_ends)
-names(ce_end_seqs) <- ce_ends$transcript_id
+ends <- resize(transcripts, width=30, fix="end")
+end_seqs <- getSeq(seqs, ends)
+names(end_seqs) <- ends$transcript_id
 
 # We can check for general biasses in base composition:
 
-letter_counts <- consensusMatrix(ce_end_seqs)
-probs <- prop.table(letter_counts[1:4,], 2)
-seqLogo(probs, ic.scale=FALSE)
-seqLogo(probs)
+letter_counts <- consensusMatrix(end_seqs)
+
+props <- prop.table(letter_counts[1:4,], 2)
+seqLogo(props, ic.scale=FALSE)
+seqLogo(props)
 
 # Saving the sequences to a file lets us apply command-line tools:
 
-writeXStringSet(ce_end_seqs, "ce_end_seqs.fasta")
+writeXStringSet(end_seqs, "end_seqs.fasta")
 
 # This is suitable for use with, for example, the streme tool from MEME.
 
-# streme --rna --minw 4 --maxw 15 --p ce_end_seqs.fasta
+# streme --rna --minw 4 --maxw 15 --p end_seqs.fasta
 
-# Ok, so actually it is well known that there is a PolyAdenylation
-# Signal (PAS) motif, canonically "AAUAAA". Let's look for this known
-# motif.
+# Ok ok, so actually it is well known that there is a PolyAdenylation
+# Signal (PAS) motif, canonically "AAUAAA". Let's now look for this
+# known motif.
 
-# Which contain the canonical PAS?
-counts <- vcountPattern("AATAAA", ce_end_seqs)
+matches <- vmatchPattern("AATAAA", end_seqs)
+counts  <- vcountPattern("AATAAA", end_seqs)
+
 table(counts)
+plot( tabulate(start(unlist(matches)),30), xlab="start position",ylab="matches")
 
 # We could also look for this pattern in the genome in general. Here is
 # some code to find matches on either strand, using vmatchPattern().
@@ -505,19 +544,21 @@ matches
 # Once we have a set of ranges, they can be related to other sets of
 # ranges. For example, to reproduce the earlier result:
 
-overlaps <- findOverlaps(matches, ce_ends, type="within")
+overlaps <- findOverlaps(matches, ends, type="within")
 table(table( subjectHits(overlaps) ))
 
-# The matches can be examined in IGV if save in a GFF file.
+# The matches can be examined in IGV if saved in a GFF file. With a
+# "tabix" index, IGV avoids the need to load the whole file.
 
-export(matches, "motif-matches.gff")
+export(matches, "motif-matches.gff", index=TRUE)
 
-# The pairwiseAlignment() function provides more flexibility if needed.
-# Command-line tools such as BLAST may be faster.
+# The pairwiseAlignment() function provides more flexibility than
+# vmatchPattern(), if needed. Command-line tools such as BLAST may be
+# faster.
 #
 # Similar exploration can be performed around other regions of interest,
-# such as peaks identified from ChIP. R will either provide a complete
-# solution, or serve as the glue plugging command-line tools together.
+# such as peaks identified from ChIP. R may either provide a complete
+# solution or serve as the glue plugging command-line tools together.
 
 
 
@@ -550,36 +591,19 @@ export(depth, "depth.bw")
 # Explore the documentation for "GenomicAlignments", "Rle", and
 # "RleList". "Rle" and "RleList" objects are memory-efficient vectors
 # and lists of vectors. They support arithmetic operation such as
-# scaling with * and adding with +. Rather neat!
+# scaling with * and adding with +. Rather neat! Sometimes a function
+# won't support "Rle"s. When this happens, an Rle can be converted to a
+# conventional vector with as.numeric().
 #
-# Sometimes a function won't support "Rle"s. When this happens, an Rle
-# can be converted to a conventional vector with as.numeric().
+# Filtered import of a BAM file can be performed with a suitable use of
+# ScanBamParam, import(bam, param=ScanBamParam( ... )):
 #
-# Filtered import can be performed with a suitable use of ScanBamParam,
-# import(bam, param=ScanBamParam( ... )):
-#
-# * specific strand
-# * specific region of reference genome
-# * specific set of cells, based on BAM attributes
+# * Specific strand.
+# * Specific region of reference genome.
+# * Specific set of single cells, based on CB attribute.
 #
 # Try loading the "motif-matches.gff", "example.bam", and "depth.bw"
 # files into IGV. Look for example at gene "rps-12".
-#
-# ...
-#
-# ...
-#
-# ...
-#
-# At this point, your brain should be full. We now want to finish be
-# touching lightly on some further facilities of Bioconductor without
-# going into too much detail.
-#
-# ...
-#
-# ...
-#
-# ...
 
 
 
@@ -624,44 +648,8 @@ cds_seqs
 
 # (return to slideshow)
 
-# Besides software, Bioconductor includes various types of data. An
-# important type of data is data describing model organisms. This is
-# either supplied through data packages or through the newer
-# AnnotationHub system. It is generally derived from these central
-# repositories:
-#
-# * The NCBI's [RefSeq](https://www.ncbi.nlm.nih.gov/refseq/)
-# * The EBI's [Ensembl genome browser](https://ensembl.org/)
-# * The [UCSC genome browser](https://genome.ucsc.edu/cgi-bin/hgGateway)
-#
-# UCSC was the original web-based genome browser. UCSC's "KnownGene"
-# gene annotations used to be the cutting edge gene annotation source,
-# but UCSC now relies on other sources for gene annotations. Many [file
-# types](https://genome.ucsc.edu/FAQ/FAQformat.html) that remain
-# important today were developed for the UCSC genome browser, such as
-# "bed", "bigWig", and "2bit".
-#
-# These organizations will generally obtain genome assemblies from the
-# same ultimate sources. For example, all of the above use the Genome
-# Reference Consortium's GRCh38 DNA sequence for homo sapiens. UCSC
-# calls this "hg38" but it is the same DNA sequence. These DNA sequences
-# serve as a common frame of reference. However the three organizations
-# above will differ on their exact set of gene and transcript
-# annotations, and use different gene and transcript ID systems.
-#
-# Genome assemblies are released infrequently. GRCh38 (hg38) was
-# released in 2013. The previous assembly, GRCh37 (hg19) was released in
-# 2009. Some people haven't updated yet, you will find plenty of data
-# using "hg19" positions! Gene and transcript annotations are updated
-# far more frequently.
-#
-# As well as the chromosomes in the "primary assembly" a genome assembly
-# may have further sequences, which may have been added after the
-# initial release:
-#
-# * patch sequences: fixes that would change the sizes of chromosomes
-# * alt loci: a way to represent alleles, genetic diversity in the
-# species
+# Besides software, Bioconductor includes various types of reference
+# data.
 
 # 13.1 Example packages ----
 #
@@ -700,7 +688,7 @@ cds_seqs
 # Bioconductor packages. The retrieved data is returned in an
 # appropriate Bioconductor type. If data is being updated over time (eg
 # improved annotation of a genome), each version receives a unique ID in
-# AnnotationHub, making it possible to write reproducable analyses.
+# AnnotationHub, making it possible to write reproducible analyses.
 #
 # Files are cached, so they will only be downloaded once.
 #
@@ -753,10 +741,8 @@ select(sc_orgdb, c("ACT1", "COS2"), keytype="GENENAME",  columns=c("ENSEMBL"))
 
 
 
-#////////////////////
-# 14xxxxxxxxxxxx ----
-
-# 14.1 Under the hood ----
+#/////////////////////////////////
+# 14 Under the hood of a TxDb ----
 #
 # A TxDb is a subclass of AnnotationDb. Under the hood it is an SQLite
 # database.
@@ -780,29 +766,15 @@ AnnotationDbi::select(txdb, key="WBGene00015062", keytype="GENEID", columns="TXI
 AnnotationDbi::select(txdb, key="WBGene00015062", keytype="GENEID",
                       columns=c("TXID","EXONID","EXONSTART","EXONEND","EXONSTRAND"))
 
-# Various other reference information is given by Bioconductor in the
-# form of AnnotationDb objects. We will see some of these later.
+# Other reference information given by Bioconductor as subclasses of
+# AnnotationDb can be examined in the same way.
 
-# 14.2 Challenge ----
+
+
+#//////////////////////////////
+# 15 Package versions used ----
 #
-# Get the 30 bases upstrand of the ends of transcripts which have the
-# "protein_coding" biotype.
-#
-# 💡 Using accessor methods like "start()" and "strand()" frees the
-# authors of GRanges to store data internally using whatever efficiency
-# tricks they want, and even to change this in a new version of
-# Bioconductor. This is good, but it can be better:
-#
-# 💡 Double-stranded DNA has a rotational symmetry. None of the physics
-# of DNA is changed if we look at it rotated end-to-end 180 degrees.
-# Labelling of the strands as "+" and "-" is arbitrary. Also, it is
-# usually not the exact position of features in a genome that is
-# important so much as their relative position. If we restrict outselves
-# to using functions that work just as well with either labelling of
-# strands, and that are not affected by absolute position, our code will
-# more directly express our intention and be less prone to bugs.
-#
-# Use sessionInfo() to check the versions of packages you have used.
+# Use sessionInfo() to check the versions of packages used.
 
 sessionInfo()
 
