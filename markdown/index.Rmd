@@ -52,6 +52,8 @@ BiocManager::install(c(
     "Rsamtools",
     "Gviz",
     "seqLogo",
+    "org.Ce.eg.db",
+    "GO.db",
     "AnnotationHub"))
 
 
@@ -65,11 +67,11 @@ BiocManager::install(c(
 
 * Most of the packages used in this workshop have vignettes.
 
-* The [file format FAQ](https://genome.ucsc.edu/FAQ/FAQformat.html) by UCSC. Mentioned in this workshop are GTF, GFF, BAM, bigWig. Also see [FASTA](https://en.wikipedia.org/wiki/FASTA_format) for sequences. [samtools (htslib)](http://www.htslib.org/) can make an index for many of these file types, for fast access by genome browsers and other software.
+* The [file format FAQ](https://genome.ucsc.edu/FAQ/FAQformat.html) by UCSC. Mentioned in this workshop are GTF, GFF, BAM, bigWig. Also see [FASTA](https://en.wikipedia.org/wiki/FASTA_format) for sequences. [samtools and related tools](http://www.htslib.org/) can make an index for many of these file types, for fast access by genome browsers and other software.
 
 * The [plyranges](https://bioconductor.org/packages/release/bioc/html/plyranges.html) package by Stuart Lee provides a "tidy" approach to GRanges. Stuart has also written an introduction to [S4 classes](https://stuartlee.org/2019/07/09/s4-short-guide/).
 
-* James MacDonald and Lori Sheppard gave an introduction to Bioconductor annotation resources at Bioc2021: [video](https://www.youtube.com/watch?v=3ABBm7BZszI), [workshop material](https://jmacdon.github.io/Bioc2021Anno/articles/AnnotationWorkshop.html). Good discussion of Bioconductor history.
+* James MacDonald and Lori Sheppard gave an introduction to Bioconductor annotation resources at Bioc2021: [video](https://www.youtube.com/watch?v=3ABBm7BZszI), [workshop material](https://jmacdon.github.io/Bioc2021Anno/articles/AnnotationWorkshop.html). Includes discussion of Bioconductor's history.
 
 
 ## Author

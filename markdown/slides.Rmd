@@ -7,7 +7,11 @@ output:
         css: slides_style.css
 ---
 
-## Bioconductor
+##
+
+<img src="logo_bioconductor.gif">
+
+<br>
 
 Bioconductor is repository for R packages relating to high-throughput biology (shotgun sequencing, microarrays, etc).
 
@@ -119,37 +123,6 @@ Bioconductor uses "S4" types, including it's own data frame (`DataFrame`) and li
 [Stuart Lee's guide to S4 for the perplexed](https://stuartlee.org/2019/07/09/s4-short-guide/)
 
 
-## R indexing is 1-based
-
-**0-based:** Python, C, [UCSC file formats](https://genome.ucsc.edu/FAQ/FAQformat.html) such as BED
-
-```
-   +---+---+---+---+---+---+
-   | A | C | G | T | A | C |
-   +---+---+---+---+---+---+
-   0   1   2   3   4   5   6
-
-           |<-  2:5  ->|      width = 5-2
-
-   seq[2] == "G"    seq[2:5] == "GTA"
-```
-
-**1-based:** R, GFF and GTF feature files, SAM alignment files
-
-```
-   +---+---+---+---+---+---+
-   | A | C | G | T | A | C |
-   +---+---+---+---+---+---+
-     1   2   3   4   5   6
-
-             |<-3:5->|        width = 5-3+1
-    
-    seq[3] == "G"   seq[3:5] == "GTA"
-```
-
-Bioconductor file import functions will convert all data to 1-based.
-<br>Need to do own conversion if using `read.table()`, etc.
-
 ##
 
 (do workshop)
@@ -175,6 +148,50 @@ Bioconductor file import functions will convert all data to 1-based.
 
 `rtracklayer::import()` can read many file types.
 
+
+## R indexing is 1-based
+
+<div style="float: left; width: 40%">
+**1-based** 
+
+R, GFF and GTF feature files,<br>SAM alignment files, ...
+
+```
+   +---+---+---+---+---+---+
+   | A | C | G | T | A | C |
+   +---+---+---+---+---+---+
+     1   2   3   4   5   6
+             |       |
+             |<----->|        
+    
+    seq[3] == "G"   seq[3:5] == "GTA"
+```
+</div>
+
+<div style="float: right; width: 50%">
+**0-based** 
+
+Python, C,<br>BED feature files, ...
+
+```
+   +---+---+---+---+---+---+
+   | A | C | G | T | A | C |
+   +---+---+---+---+---+---+
+   0   1   2   3   4   5   6
+           |           |
+           |<--------->|      
+
+   seq[2] == "G"    seq[2:5] == "GTA"
+```
+</div>
+
+<div style="clear: both"></div>
+
+<br>
+
+Bioconductor file import functions will convert all data to 1-based.
+
+Need to do own conversion if using `read.table()`, etc.
 
 ## Reference genomes and annotations
 

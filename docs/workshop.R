@@ -103,12 +103,14 @@ myset$chrII
 # or myset[["chrII"]]
 # or myset[[2]]
 
-# 3.3 Challenge ----
+# 3.3 Challenge: sequences ----
 #
-# Reverse complement the following DNA sequence and then translate to an
-# amino acid sequence:
+# 1. Reverse complement the following DNA sequence. Translate the result
+# to an amino acid sequence.
 
-"GCTTTCGTTTTCGCC"
+"GTAGAGTAATATGGA"
+
+# 2. Also translate bases 3 to 11 of the reverse complement.
 #
 
 
@@ -379,11 +381,11 @@ look(trx1_features, trx1_features$type)
 # example flank(), resize(), and promoters() respect strand but shift()
 # does not.
 #
-# For example, suppose we are interested in the first two bases of a
+# For example, suppose we are interested in the first 100 bases of a
 # transcript:
 
 feat <- features[2]
-feat_initial <- resize(feat, 2, fix="start")
+feat_initial <- resize(feat, 100, fix="start")
 
 look( c(feat, feat_initial) )
 getSeq(seqs, feat_initial)
@@ -462,18 +464,19 @@ look( disjoin(trx1_exons) )
 #
 # 1. Make a GRanges of all transcripts with a biotype of
 # "protein_coding".
+#
 # 2. Make a GRanges of the two bases immediately preceding each of these
 # transcripts.
-# 3. Use this to get the two bases immediately preceding each
-# transcript.
-# 4. Use table() to see if any sequences are particularly common.
+#
+# 3. Get the DNA sequences of the ranges from part 2. Use table() to see
+# if any sequences are particularly common.
 #
 # Advanced: Get the four bases spanning the start of the transcript (two
 # upstrand of the start and two downstrand of the start).
 #
-# Note: In C. elegans the picture is complicated by trans-splicing. I
-# wonder what exactly the 5' ends of these transcript annotations
-# represent?
+# Note: In C. elegans transcript initiation is complicated by trans-
+# splicing. I wonder what exactly the 5' ends of these transcript
+# annotations represent?
 #
 
 
@@ -514,14 +517,13 @@ writeXStringSet(end_seqs, "end_seqs.fasta")
 
 # streme --rna --minw 4 --maxw 15 --p end_seqs.fasta
 
-# Ok ok, so actually it is well known that there is a PolyAdenylation
-# Signal (PAS) motif, canonically "AAUAAA". Let's now look for this
-# known motif.
+# Ok ok, so actually there is known PolyAdenylation Signal (PAS) motif,
+# canonically "AAUAAA". Let's now look for this known motif.
+
+counts  <- vcountPattern("AATAAA", end_seqs)
+table(counts)
 
 matches <- vmatchPattern("AATAAA", end_seqs)
-counts  <- vcountPattern("AATAAA", end_seqs)
-
-table(counts)
 plot( tabulate(start(unlist(matches)),30), xlab="start position",ylab="matches")
 
 # We could also look for this pattern in the genome in general. Here is
@@ -553,8 +555,8 @@ table(table( subjectHits(overlaps) ))
 export(matches, "motif-matches.gff", index=TRUE)
 
 # The pairwiseAlignment() function provides more flexibility than
-# vmatchPattern(), if needed. Command-line tools such as BLAST may be
-# faster.
+# vmatchPattern(), if needed. Command-line tools such as BLAST will be
+# faster for longer query sequences.
 #
 # Similar exploration can be performed around other regions of interest,
 # such as peaks identified from ChIP. R may either provide a complete
@@ -563,19 +565,19 @@ export(matches, "motif-matches.gff", index=TRUE)
 
 
 #/////////////////////////
-# 11 BAMs and Bigwigs ----
+# 11 BAMs and bigWigs ----
 #
 # import() can read various other file types. This section will
 # demonstrate reading read alignments from a BAM file and producing a
-# Bigwig depth of coverage file. The reads in the BAM file used here are
+# bigWig depth of coverage file. The reads in the BAM file used here are
 # a small sample from GSE57993 sample "N2 Rep1".
 # https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE57993
 #
-# Both BAM and Bigwig files are designed so that specific regions can be
+# Both BAM and bigWig files are designed so that specific regions can be
 # accessed efficiently. Genome browsers can use this to only load data
 # as needed. Bioconductor packages will also usually offer some way to
-# load specific regions. This is useful because these can be very large
-# files.
+# load specific regions. This is useful because these files can be very
+# large.
 
 alignments <- import("example.bam")
 alignments
@@ -611,12 +613,13 @@ export(depth, "depth.bw")
 # 12 Transcript database objects ----
 #
 # We've been using our genomic features as one big unstructured GRanges.
-# This is messy. Furthermore, eukaryote genes contain exons and introns.
+# This is messy. TxDb objects offer a more structured representation of
+# genes, transcripts, exons, and coding sequences.
 
 txdb <- makeTxDbFromGRanges(features)
 txdb
 
-# txdb is a TxDb object.
+# txdb is a "TxDb" object. Some ways to extract data from a TxDb are:
 
 genes(txdb)
 transcriptsBy(txdb, by="gene")
@@ -628,26 +631,25 @@ cds_ranges$B0228.5a.1
 cds_ranges[["B0228.5a.1"]]
 unlist(cds_ranges)
 
-# cds_ranges is a GRangesList. That is, a list containing GRanges
+# cds_ranges here is a "GRangesList". That is, a list containing GRanges
 # objects. To get the transcript sequence or the coding sequence, these
 # each need to be retrieved and then concatenated together.
-# extractTranscriptSeqs can do this for us.
+# extractTranscriptSeqs() can do this for us.
 
-cds_seqs <- extractTranscriptSeqs(seqs, cds_ranges)
-cds_seqs
+extractTranscriptSeqs(seqs, cds_ranges)
 
 # There's much more to explore here. Have a look at the documentation
 # for the GenomicFeatures and ensembldb packages. To annotate a set of
 # genomic features such as peaks from a ChIP-seq experiment, see for
-# example the  ChIPseeker package.
+# example the ChIPseeker package.
 
 
 
 #////////////////////////////////////////
 # 13 Genome and annotation resources ----
-
+#
 # (return to slideshow)
-
+#
 # Besides software, Bioconductor includes various types of reference
 # data.
 
@@ -670,16 +672,47 @@ cds_seqs
 # * *GO.db* GO Gene Ontology term descriptions and relationships.
 # However to find which terms apply to specific genes, use the GOALL
 # column in the relevant species' organism database.
+#
+# Loading any of these packages gives you an AnnotationDb object
+# (defined in the package AnnotationDbi). The main way to query these
+# objects is with the select() function. mapIds() can be used if you
+# need to enforce a one-to-one mapping.
+
+library(org.Ce.eg.db)
+
+keytypes(org.Ce.eg.db)
+columns(org.Ce.eg.db)
+
+AnnotationDbi::select(org.Ce.eg.db,
+    keys="trx-1", keytype="SYMBOL", columns=c("ENSEMBL","ENTREZID"))
+
+head( AnnotationDbi::select(org.Ce.eg.db,
+    keys="WBGene00015062", keytype="ENSEMBL", columns="GOALL") )
+
+
+library(GO.db)
+
+AnnotationDbi::select(GO.db,
+    keys="GO:0005622", keytype="GOID", columns="TERM")
+
+# The TxDb we made earlier can also be used in this way.
+
+keytypes(txdb)
+columns(txdb)
+
+# Under the hood these are all SQLite databases. select() joins tables
+# together as needed to answer a query.
+
+DBI::dbListTables( dbconn(txdb) )
+DBI::dbListFields( dbconn(txdb), "transcript" )
 
 # 13.2 biomaRt ----
 #
 # [BioMart](http://www.biomart.org/) servers accessed using the biomaRt
 # package are another way to get information such as translation of gene
-# ids, gene sets, and gene information.
-#
-# Beware replicability. BioMart servers are not guaranteed to be
-# available forever, and BioMart doesn't have a clear story around
-# versioning.
+# ids, gene sets, and gene information. For reproducibility, if using
+# the ENSEMBL servers, make sure to specify a specific version of
+# ENSEMBL to use.
 
 # 13.3 AnnotationHub ----
 #
@@ -708,18 +741,14 @@ table( ah$rdataclass )
 display(ah)
 
 # query() searches for terms in an unstructured way
-records <- query(ah, c("Ensembl", "96", "Saccharomyces cerevisiae"))
-records
-
-mcols(records)
-mcols(records)[,c("title","rdataclass")]
+query(ah, c("Ensembl", "96", "Saccharomyces cerevisiae"))
 
 # Having located records of interest,
 # your R script can refer to the specific AH... record,
 # so it always uses the same version of the data.
-sc_genome <- ah[["AH70449"]]
+sc_genome  <- ah[["AH70449"]]
 sc_granges <- ah[["AH69700"]]
-sc_txdb <- ah[["AH69265"]]
+sc_txdb    <- ah[["AH69265"]]
 
 # sc_genome is a TwoBitFile
 # Can use getSeq on it without loading everything into memory
@@ -727,52 +756,10 @@ seqinfo(sc_genome)
 getSeq(sc_genome, as("IV:1-10","GRanges"))
 import(sc_genome)
 
-# An OrgDb contains information about genes in an organism, and lets you map between different identifiers
-query(ah, c("OrgDb", "Saccharomyces cerevisiae"))
-sc_orgdb <- ah[["AH84129"]]
-columns(sc_orgdb)
-head( keys(sc_orgdb, "ENSEMBL") )
-select(sc_orgdb, "YFL039C", keytype="ENSEMBL", columns=c("GENENAME", "DESCRIPTION"))
-
-# As well as IDs, genes have short, easy to remember "symbols" (also often called "names")
-# We can use the OrgDb to look up gene IDs from symbols
-# Notice a problem here!
-select(sc_orgdb, c("ACT1", "COS2"), keytype="GENENAME",  columns=c("ENSEMBL"))
-
-
-
-#/////////////////////////////////
-# 14 Under the hood of a TxDb ----
-#
-# A TxDb is a subclass of AnnotationDb. Under the hood it is an SQLite
-# database.
-
-# Poking around inside
-DBI::dbListTables( dbconn(txdb) )
-DBI::dbListFields( dbconn(txdb), "gene" )
-DBI::dbListFields( dbconn(txdb), "transcript" )
-DBI::dbListFields( dbconn(txdb), "exon" )
-DBI::dbListFields( dbconn(txdb), "cds" )
-DBI::dbListFields( dbconn(txdb), "splicing" )
-
-# AnnotationDb objects contain a set of tables. The select method will
-# join tables together as necessary to output the requested set of
-# columns. Depending on the columns, you may get less or more rows.
-
-keytypes(txdb)
-columns(txdb)
-
-AnnotationDbi::select(txdb, key="WBGene00015062", keytype="GENEID", columns="TXID")
-AnnotationDbi::select(txdb, key="WBGene00015062", keytype="GENEID",
-                      columns=c("TXID","EXONID","EXONSTART","EXONEND","EXONSTRAND"))
-
-# Other reference information given by Bioconductor as subclasses of
-# AnnotationDb can be examined in the same way.
-
 
 
 #//////////////////////////////
-# 15 Package versions used ----
+# 14 Package versions used ----
 #
 # Use sessionInfo() to check the versions of packages used.
 

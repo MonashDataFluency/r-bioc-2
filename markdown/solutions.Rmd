@@ -4,6 +4,19 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Challenge: sequences
+
+```{r}
+rc_seq <- reverseComplement(DNAString("GTAGAGTAATATGGA"))
+
+translate(rc_seq)
+
+translate(subseq(rc_seq,3,11))
+# or
+translate(rc_seq[3:11])
+```
+
+
 # Challenge: transcript initiation
 
 ```{r}
@@ -83,4 +96,35 @@ letter_counts <- consensusMatrix(ce_start_seqs)
 probs <- prop.table(letter_counts[1:4,], 2)
 seqLogo(probs, ic.scale=FALSE)
 seqLogo(probs)
+
+
+
+
+words <- toupper(readLines("/usr/share/dict/words"))
+
+while(TRUE) {
+    n <- 100000
+    a <- 21
+    seq <- DNAStringSet(c("x"=paste(sample(c("A","C","G","T"),n*a,replace=TRUE),collapse="")))
+    seqs <- getSeq(seq,GRanges("x",IRanges(start=1+a*(seq_len(n)-1),width=a)))
+    t1 <- translate(seqs)
+    t2 <- translate(subseq(seqs, 3, 11))
+    sel <- as.character(t1) %in% words & as.character(t2) %in% words
+    if (any(sel)) {
+        print( paste(seqs[sel],t1[sel],t2[sel]) )
+    }
+}
+
+
+# TCCATATTACTCTAC SILLY HIT
+x <- reverseComplement(DNAString("TCCATATTACTCTAC"))
+y <- reverseComplement(DNAString("GTAGAGTAATATGGA"))
+translate(y)
+translate(subseq(y,3,11))
+
+# GGCGCGCTGGCGAATACG GALANT RAGE (3 14)
+# TCGGAAGAGAAGGAGAGG SEEKER GREG
+
 ```
+
+
