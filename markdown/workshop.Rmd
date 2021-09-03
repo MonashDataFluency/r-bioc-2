@@ -40,22 +40,21 @@ To update any out-of-date packages use `install()` with no arguments. Restart yo
 Bioconductor packages usually have useful documentation in the form of "vignettes". These are readable on the Bioconductor website https://bioconductor.org/packages/release/BiocViews.html#___Software , from the RStudio "help" pane, or within R:
 
 ```{r eval=FALSE}
-vignette()
-vignette(package="Biostrings")
+help(package="Biostrings")
+# -> select "User guides, package vignettes, and other documentation"
+
 vignette("BiostringsQuickOverview", package="Biostrings")
 ```
 
 
-# Packages used in this workshop
+# Main packages used in this workshop
 
 ```{r warning=FALSE, message=FALSE}
 library(Biostrings)      # Provides DNAString, DNAStringSet, etc
 library(BSgenome)        # Provides getSeq()
-library(GenomicRanges)   # Provides GRanges containing genomic ranges, etc
-library(GenomicFeatures) # Provides TxDb objects containing genes/transcripts/exons
+library(GenomicRanges)   # Provides GRanges containing genomic ranges
 library(rtracklayer)     # Provides import() and export()
 library(Gviz)            # Provides plotting of genomic features
-library(seqLogo)         # Provides sequence logo plots for motifs, etc
 ```
 
 
@@ -196,8 +195,7 @@ look <- function(features, labels=seq_along(features)) {
         showFeatureId=TRUE, fontcolor.feature="black")
     plotTracks(
         list(axis_track, feature_track), 
-        from=min(start(features))-2, 
-        to=max(end(features))+2)
+        extend.left=1, extend.right=2)
 }
 
 look( c(range1, range2) )
@@ -235,7 +233,7 @@ names(seqs) <- sub(" .*","",names(seqs))
 names(seqs)
 ```
 
-Conversely, a DNAStringSet can also be written to a file with `writeXStringSet`.
+Conversely, a DNAStringSet can be written to a file with `writeXStringSet`.
 
 
 ## Loading features
@@ -480,6 +478,8 @@ names(end_seqs) <- ends$transcript_id
 We can check for general biasses in base composition:
 
 ```{r}
+library(seqLogo)  
+
 letter_counts <- consensusMatrix(end_seqs)
 
 props <- prop.table(letter_counts[1:4,], 2)
@@ -582,6 +582,8 @@ Try loading the "motif-matches.gff", "example.bam", and "depth.bw" files into IG
 We've been using our genomic features as one big unstructured GRanges. This is messy. TxDb objects offer a more structured representation of genes, transcripts, exons, and coding sequences.
 
 ```{r}
+library(GenomicFeatures)
+
 txdb <- makeTxDbFromGRanges(features)
 txdb
 ```
@@ -663,7 +665,17 @@ DBI::dbListFields( dbconn(txdb), "transcript" )
 
 ## biomaRt 
 
-[BioMart](http://www.biomart.org/) servers accessed using the `biomaRt` package are another way to get information such as translation of gene ids, gene sets, and gene information. For reproducibility, if using the ENSEMBL servers, make sure to specify a specific version of ENSEMBL to use.
+[BioMart](http://www.biomart.org/) servers accessed using the `biomaRt` package are another way to get information such as translation of gene ids, gene sets, and gene information. For reproducibility, if using the ENSEMBL servers, make sure to specify a specific version of Ensembl to use. Your scripts may fail in future if the server you are using goes down or changes how it is accessed.
+
+```{r eval=FALSE}
+library(biomaRt)
+
+mart <- useEnsembl(biomart = "genes", dataset = "celegans_gene_ensembl", version=104)
+
+getBM(
+    attributes=c("external_gene_name", "ensembl_gene_id", "entrezgene_id"), 
+    filters="external_gene_name", values="trx-1", mart=mart)
+```
 
 
 ## AnnotationHub

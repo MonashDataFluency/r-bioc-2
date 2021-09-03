@@ -3328,7 +3328,7 @@ BiocManager::install()</pre>
 <p>Most base R packages use &ldquo;S3&rdquo; types. Data frames, tibbles, and linear model fits are examples of these.</p>
 
 <ul>
-<li>essentially lists</li>
+<li>usually a <code>list</code> vector underneath</li>
 <li>if necessary, peek inside with <code>$</code></li>
 </ul>
 
@@ -3336,7 +3336,7 @@ BiocManager::install()</pre>
 
 <h3>👉👉  S4 types</h3>
 
-<p>Bioconductor uses &ldquo;S4&rdquo; types, including it’s own data frame (<code>DataFrame</code>) and list types (<code>SimpleList</code>, <code>GRangesList</code>, etc etc). If stuck, can almost always convert to base R types with <code>as.data.frame</code>, <code>as.list</code>, <code>as.character</code>, <code>as.numeric</code>.</p>
+<p>Bioconductor uses &ldquo;S4&rdquo; types, including it’s own data frame (<code>DataFrame</code>) and list types (<code>SimpleList</code>, <code>GRangesList</code>, etc etc). If stuck, can almost always convert to base R types with <code>as.data.frame()</code>, <code>as.list()</code>, <code>as.character()</code>, <code>as.numeric()</code>, <code>as()</code>.</p>
 
 <ul>
 <li>use accessor functions such as <code>seqnames</code>, <code>start</code>, <code>end</code>, <code>width</code>, <code>nchars</code></li>

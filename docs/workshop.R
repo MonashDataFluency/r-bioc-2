@@ -30,22 +30,21 @@
 # https://bioconductor.org/packages/release/BiocViews.html#___Software ,
 # from the RStudio "help" pane, or within R:
 
-vignette()
-vignette(package="Biostrings")
+help(package="Biostrings")
+# -> select "User guides, package vignettes, and other documentation"
+
 vignette("BiostringsQuickOverview", package="Biostrings")
 
 
 
-#//////////////////////////////////////
-# 2 Packages used in this workshop ----
+#///////////////////////////////////////////
+# 2 Main packages used in this workshop ----
 
 library(Biostrings)      # Provides DNAString, DNAStringSet, etc
 library(BSgenome)        # Provides getSeq()
-library(GenomicRanges)   # Provides GRanges containing genomic ranges, etc
-library(GenomicFeatures) # Provides TxDb objects containing genes/transcripts/exons
+library(GenomicRanges)   # Provides GRanges containing genomic ranges
 library(rtracklayer)     # Provides import() and export()
 library(Gviz)            # Provides plotting of genomic features
-library(seqLogo)         # Provides sequence logo plots for motifs, etc
 
 
 
@@ -182,8 +181,7 @@ look <- function(features, labels=seq_along(features)) {
         showFeatureId=TRUE, fontcolor.feature="black")
     plotTracks(
         list(axis_track, feature_track),
-        from=min(start(features))-2,
-        to=max(end(features))+2)
+        extend.left=1, extend.right=2)
 }
 
 look( c(range1, range2) )
@@ -223,7 +221,7 @@ names(seqs)
 names(seqs) <- sub(" .*","",names(seqs))
 names(seqs)
 
-# Conversely, a DNAStringSet can also be written to a file with
+# Conversely, a DNAStringSet can be written to a file with
 # writeXStringSet.
 
 # 5.2 Loading features ----
@@ -503,6 +501,8 @@ names(end_seqs) <- ends$transcript_id
 
 # We can check for general biasses in base composition:
 
+library(seqLogo)
+
 letter_counts <- consensusMatrix(end_seqs)
 
 props <- prop.table(letter_counts[1:4,], 2)
@@ -616,6 +616,8 @@ export(depth, "depth.bw")
 # This is messy. TxDb objects offer a more structured representation of
 # genes, transcripts, exons, and coding sequences.
 
+library(GenomicFeatures)
+
 txdb <- makeTxDbFromGRanges(features)
 txdb
 
@@ -712,7 +714,16 @@ DBI::dbListFields( dbconn(txdb), "transcript" )
 # package are another way to get information such as translation of gene
 # ids, gene sets, and gene information. For reproducibility, if using
 # the ENSEMBL servers, make sure to specify a specific version of
-# ENSEMBL to use.
+# Ensembl to use. Your scripts may fail in future if the server you are
+# using goes down or changes how it is accessed.
+
+library(biomaRt)
+
+mart <- useEnsembl(biomart = "genes", dataset = "celegans_gene_ensembl", version=104)
+
+getBM(
+    attributes=c("external_gene_name", "ensembl_gene_id", "entrezgene_id"),
+    filters="external_gene_name", values="trx-1", mart=mart)
 
 # 13.3 AnnotationHub ----
 #

@@ -107,14 +107,14 @@ Using Bioconductor will mean building familiarity with further types:
 
 Most base R packages use "S3" types. Data frames, tibbles, and linear model fits are examples of these.
 
-* essentially lists
+* usually a `list` vector underneath
 * if necessary, peek inside with `$`
 
 <br>
 
 ### 👉👉&nbsp;&nbsp;S4 types
 
-Bioconductor uses "S4" types, including it's own data frame (`DataFrame`) and list types (`SimpleList`, `GRangesList`, etc etc). If stuck, can almost always convert to base R types with `as.data.frame`, `as.list`, `as.character`, `as.numeric`.
+Bioconductor uses "S4" types, including it's own data frame (`DataFrame`) and list types (`SimpleList`, `GRangesList`, etc etc). If stuck, can almost always convert to base R types with `as.data.frame()`, `as.list()`, `as.character()`, `as.numeric()`, `as()`.
 
 * use accessor functions such as `seqnames`, `start`, `end`, `width`, `nchars`
 * if absolutely necessary, peek inside with `@`

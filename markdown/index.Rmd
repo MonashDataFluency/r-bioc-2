@@ -54,6 +54,7 @@ BiocManager::install(c(
     "seqLogo",
     "org.Ce.eg.db",
     "GO.db",
+    "biomaRt",
     "AnnotationHub"))
 
 
@@ -65,7 +66,7 @@ BiocManager::install(c(
 
 ## Further reading
 
-* Most of the packages used in this workshop have vignettes.
+* Most of the [packages](https://bioconductor.org/packages/release/BiocViews.html#___Software) used in this workshop have useful vignettes.
 
 * The [file format FAQ](https://genome.ucsc.edu/FAQ/FAQformat.html) by UCSC. Mentioned in this workshop are GTF, GFF, BAM, bigWig. Also see [FASTA](https://en.wikipedia.org/wiki/FASTA_format) for sequences. [samtools and related tools](http://www.htslib.org/) can make an index for many of these file types, for fast access by genome browsers and other software.
 
@@ -73,6 +74,9 @@ BiocManager::install(c(
 
 * James MacDonald and Lori Sheppard gave an introduction to Bioconductor annotation resources at Bioc2021: [video](https://www.youtube.com/watch?v=3ABBm7BZszI), [workshop material](https://jmacdon.github.io/Bioc2021Anno/articles/AnnotationWorkshop.html). Includes discussion of Bioconductor's history.
 
+* [Course materials and videos](https://bioconductor.org/help/course-materials/) are regularly added to the Bioconductor site.
+
+* [Ask questions on the support site.](https://support.bioconductor.org/) (Remember to check if your question has [already been answered](https://support.bioconductor.org/post/search/?query=limma+batch).)
 
 ## Author
 
