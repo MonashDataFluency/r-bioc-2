@@ -22,7 +22,7 @@ Download and install:
 
 * [R](https://cloud.r-project.org/) 
 * [RStudio](https://www.rstudio.com/products/rstudio/download/)
-* [Integrative Genome Browser (IGV)](https://software.broadinstitute.org/software/igv/download) (optional)
+* [IGV](https://software.broadinstitute.org/software/igv/download) (optional)
 
 We recommend creating a new "project" in RStudio for this workshop. This will ensure you are working in a fresh working directory. Once you have opened the project, copy and paste the following code to the R console to download necessary files and install packages. During the workshop we will be working through the code in the file "workshop.R".
 

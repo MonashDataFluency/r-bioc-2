@@ -1,7 +1,7 @@
 
 2021-09-04 Practice run
 
-"Since you all have different backgrounds, some of this may be things you know. I'm hoping there will alls be plenty of parts that are new to you. Bioconductor has many useful features that are hard to discover. There may also be things I go through too quickly. Please ask a question if I do that."
+"Since you all have different backgrounds, some of this may be things you know. I'm hoping there will be plenty of parts that are new to you. Bioconductor has many useful features that are hard to discover. There may also be things I go through too quickly. Please ask a question if I do that."
 
 Introductory slideshow.   ~ 13 minutes.
 Breakout, problem fixing. ~ 10 minutes
