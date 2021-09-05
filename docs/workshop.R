@@ -295,8 +295,8 @@ Seqinfo(genome="ce11")
 # The metadata columns let us query the GRanges, for example for a
 # feature type:
 
-cds <- subset(features, type == "CDS")
-cds
+subset(features, type == "CDS")
+
 # Equivalently:
 #   features[features$type == "CDS"]
 
@@ -606,56 +606,18 @@ export(depth, "depth.bw")
 #
 # Try loading the "motif-matches.gff", "example.bam", and "depth.bw"
 # files into IGV. Look for example at gene "rps-12".
-
-
-
-#////////////////////////////////////
-# 12 Transcript database objects ----
 #
-# We've been using our genomic features as one big unstructured GRanges.
-# This is messy. TxDb objects offer a more structured representation of
-# genes, transcripts, exons, and coding sequences.
-
-library(GenomicFeatures)
-
-txdb <- makeTxDbFromGRanges(features)
-txdb
-
-# txdb is a "TxDb" object. Some ways to extract data from a TxDb are:
-
-genes(txdb)
-transcriptsBy(txdb, by="gene")
-exonsBy(txdb, use.names=TRUE)
-cdsBy(txdb, use.names=TRUE)
-
-cds_ranges <- cdsBy(txdb, use.names=TRUE)
-cds_ranges$B0228.5a.1
-cds_ranges[["B0228.5a.1"]]
-unlist(cds_ranges)
-
-# cds_ranges here is a "GRangesList". That is, a list containing GRanges
-# objects. To get the transcript sequence or the coding sequence, these
-# each need to be retrieved and then concatenated together.
-# extractTranscriptSeqs() can do this for us.
-
-extractTranscriptSeqs(seqs, cds_ranges)
-
-# There's much more to explore here. Have a look at the documentation
-# for the GenomicFeatures and ensembldb packages. To annotate a set of
-# genomic features such as peaks from a ChIP-seq experiment, see for
-# example the ChIPseeker package.
+# (return to slideshow)
 
 
 
 #////////////////////////////////////////
-# 13 Genome and annotation resources ----
-#
-# (return to slideshow)
+# 12 Genome and annotation resources ----
 #
 # Besides software, Bioconductor includes various types of reference
 # data.
 
-# 13.1 Example packages ----
+# 12.1 Example packages ----
 #
 # * *BSgenome.Hsapiens.UCSC.hg38* Biostrings genome, Homo sapiens, from
 # the UCSC browser, version hg38. DNA for chromosomes, usable in the
@@ -697,7 +659,37 @@ library(GO.db)
 AnnotationDbi::select(GO.db,
     keys="GO:0005622", keytype="GOID", columns="TERM")
 
-# The TxDb we made earlier can also be used in this way.
+# 12.2 Transcript database objects ----
+#
+# We've been using our genomic features as one big unstructured GRanges.
+# This is messy. TxDb objects offer a more structured representation of
+# genes, transcripts, exons, and coding sequences.
+
+library(GenomicFeatures)
+
+txdb <- makeTxDbFromGRanges(features)
+txdb
+
+# txdb is a "TxDb" object. Some ways to extract data from a TxDb are:
+
+genes(txdb)
+transcriptsBy(txdb, by="gene")
+exonsBy(txdb, use.names=TRUE)
+cdsBy(txdb, use.names=TRUE)
+
+cds_ranges <- cdsBy(txdb, use.names=TRUE)
+cds_ranges$B0228.5a.1
+cds_ranges[["B0228.5a.1"]]
+unlist(cds_ranges)
+
+# cds_ranges here is a "GRangesList". That is, a list containing GRanges
+# objects. To get the transcript sequence or the coding sequence, these
+# each need to be retrieved and then concatenated together.
+# extractTranscriptSeqs() can do this for us.
+
+extractTranscriptSeqs(seqs, cds_ranges)
+
+# A TxDb can also be accessed like an AnnotationDb.
 
 keytypes(txdb)
 columns(txdb)
@@ -708,7 +700,12 @@ columns(txdb)
 DBI::dbListTables( dbconn(txdb) )
 DBI::dbListFields( dbconn(txdb), "transcript" )
 
-# 13.2 biomaRt ----
+# There's much more to explore here. Have a look at the documentation
+# for the GenomicFeatures and ensembldb packages. To annotate a set of
+# genomic features such as peaks from a ChIP-seq experiment, see for
+# example the ChIPseeker package.
+
+# 12.3 biomaRt ----
 #
 # [BioMart](http://www.biomart.org/) servers accessed using the biomaRt
 # package are another way to get information such as translation of gene
@@ -725,7 +722,7 @@ getBM(
     attributes=c("external_gene_name", "ensembl_gene_id", "entrezgene_id"),
     filters="external_gene_name", values="trx-1", mart=mart)
 
-# 13.3 AnnotationHub ----
+# 12.4 AnnotationHub ----
 #
 # AnnotationHub is a way to retrieve data from a more comprehensive set
 # of organisms and data providers than are provided as individual
@@ -770,7 +767,7 @@ import(sc_genome)
 
 
 #//////////////////////////////
-# 14 Package versions used ----
+# 13 Package versions used ----
 #
 # Use sessionInfo() to check the versions of packages used.
 

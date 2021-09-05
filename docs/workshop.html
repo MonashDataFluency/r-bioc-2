@@ -1866,8 +1866,8 @@ seqinfo(features) &lt;- myseqinfo</code></pre>
 <div id="querying-granges-objects" class="section level1" number="7">
 <h1 number="7"><span class="header-section-number">7</span> Querying GRanges objects</h1>
 <p>The metadata columns let us query the GRanges, for example for a feature type:</p>
-<pre class="r"><code>cds &lt;- subset(features, type == &quot;CDS&quot;)
-cds
+<pre class="r"><code>subset(features, type == &quot;CDS&quot;)
+
 # Equivalently:
 #   features[features$type == &quot;CDS&quot;]</code></pre>
 <pre><code>## GRanges object with 225595 ranges and 5 metadata columns:
@@ -2264,64 +2264,13 @@ plot(depth$III[5679200:5680200], type=&quot;l&quot;)</code></pre>
 <li>Specific set of single cells, based on CB attribute.</li>
 </ul>
 <p>Try loading the “motif-matches.gff”, “example.bam”, and “depth.bw” files into IGV. Look for example at gene “rps-12”.</p>
-</div>
-<div id="transcript-database-objects" class="section level1" number="12">
-<h1 number="12"><span class="header-section-number">12</span> Transcript database objects</h1>
-<p>We’ve been using our genomic features as one big unstructured GRanges. This is messy. TxDb objects offer a more structured representation of genes, transcripts, exons, and coding sequences.</p>
-<pre class="r"><code>library(GenomicFeatures)</code></pre>
-<pre><code>## Warning: package &#39;GenomicFeatures&#39; was built under R version 4.1.1</code></pre>
-<pre><code>## Loading required package: AnnotationDbi</code></pre>
-<pre><code>## Loading required package: Biobase</code></pre>
-<pre><code>## Welcome to Bioconductor
-## 
-##     Vignettes contain introductory material; view with
-##     &#39;browseVignettes()&#39;. To cite Bioconductor, see
-##     &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.</code></pre>
-<pre class="r"><code>txdb &lt;- makeTxDbFromGRanges(features)
-txdb</code></pre>
-<pre><code>## TxDb object:
-## # Db type: TxDb
-## # Supporting package: GenomicFeatures
-## # Genome: NA
-## # Nb of transcripts: 61451
-## # Db created by: GenomicFeatures package from Bioconductor
-## # Creation time: 2021-09-04 09:30:21 +1000 (Sat, 04 Sep 2021)
-## # GenomicFeatures version at creation time: 1.45.2
-## # RSQLite version at creation time: 2.2.8
-## # DBSCHEMAVERSION: 1.2</code></pre>
-<p><code>txdb</code> is a “TxDb” object. Some ways to extract data from a TxDb are:</p>
-<pre class="r"><code>genes(txdb)
-transcriptsBy(txdb, by=&quot;gene&quot;)
-exonsBy(txdb, use.names=TRUE)
-cdsBy(txdb, use.names=TRUE)
-
-cds_ranges &lt;- cdsBy(txdb, use.names=TRUE)
-cds_ranges$B0228.5a.1
-cds_ranges[[&quot;B0228.5a.1&quot;]]
-unlist(cds_ranges)</code></pre>
-<p><code>cds_ranges</code> here is a “GRangesList”. That is, a list containing GRanges objects. To get the transcript sequence or the coding sequence, these each need to be retrieved and then concatenated together. <code>extractTranscriptSeqs()</code> can do this for us.</p>
-<pre class="r"><code>extractTranscriptSeqs(seqs, cds_ranges)</code></pre>
-<pre><code>## DNAStringSet object of length 33552:
-##         width seq                                           names               
-##     [1]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.3
-##     [2]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.1
-##     [3]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.4
-##     [4]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.5
-##     [5]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.2
-##     ...   ... ...
-## [33548]  1227 TTGTTAGAATTTCTTTTTATC...TTTTGATTAAGTGTGTTTTAC MTCE.25.1
-## [33549]  1575 ATTAATCTTTATAAAAAATAT...AGAACTACTAGATTAAAAAAT MTCE.26.1
-## [33550]   693 ATTAATAATTTTTTTCAAGGA...TGATGTTTTGGTACTATAGAA MTCE.31.1
-## [33551]   333 ATTTTAGTGCTATTAATAGTT...GGTAAATTAGTTTGAGTAATT MTCE.34.1
-## [33552]  1581 ATTAATATTTCTATTTTTTTG...TTTATTTTTTTTATAATTTGT MTCE.35.1</code></pre>
-<p>There’s much more to explore here. Have a look at the documentation for the <code>GenomicFeatures</code> and <code>ensembldb</code> packages. To annotate a set of genomic features such as peaks from a ChIP-seq experiment, see for example the <code>ChIPseeker</code> package.</p>
-</div>
-<div id="genome-and-annotation-resources" class="section level1" number="13">
-<h1 number="13"><span class="header-section-number">13</span> Genome and annotation resources</h1>
 <p>(return to slideshow)</p>
+</div>
+<div id="genome-and-annotation-resources" class="section level1" number="12">
+<h1 number="12"><span class="header-section-number">12</span> Genome and annotation resources</h1>
 <p>Besides software, Bioconductor includes various types of reference data.</p>
-<div id="example-packages" class="section level2" number="13.1">
-<h2 number="13.1"><span class="header-section-number">13.1</span> Example packages</h2>
+<div id="example-packages" class="section level2" number="12.1">
+<h2 number="12.1"><span class="header-section-number">12.1</span> Example packages</h2>
 <ul>
 <li><p><em>BSgenome.Hsapiens.UCSC.hg38</em> Biostrings genome, Homo sapiens, from the UCSC browser, version hg38. DNA for chromosomes, usable in the same way as the DNAStringSet used above.</p></li>
 <li><p><em>TxDb.Hsapiens.UCSC.hg38.knownGene</em> Transcript database, Homo sapiens, from UCSC browser, genome verison hg38, “knownGene” gene annotations. GRanges information for genes and transcripts, much as we loaded from a GTF file above.</p></li>
@@ -2330,6 +2279,13 @@ unlist(cds_ranges)</code></pre>
 </ul>
 <p>Loading any of these packages gives you an <code>AnnotationDb</code> object (defined in the package <code>AnnotationDbi</code>). The main way to query these objects is with the <code>select()</code> function. <code>mapIds()</code> can be used if you need to enforce a one-to-one mapping.</p>
 <pre class="r"><code>library(org.Ce.eg.db)</code></pre>
+<pre><code>## Loading required package: AnnotationDbi</code></pre>
+<pre><code>## Loading required package: Biobase</code></pre>
+<pre><code>## Welcome to Bioconductor
+## 
+##     Vignettes contain introductory material; view with
+##     &#39;browseVignettes()&#39;. To cite Bioconductor, see
+##     &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.</code></pre>
 <pre><code>## </code></pre>
 <pre class="r"><code>keytypes(org.Ce.eg.db)</code></pre>
 <pre><code>##  [1] &quot;ACCNUM&quot;       &quot;ALIAS&quot;        &quot;ENSEMBL&quot;      &quot;ENSEMBLPROT&quot;  &quot;ENSEMBLTRANS&quot;
@@ -2363,7 +2319,50 @@ unlist(cds_ranges)</code></pre>
 <pre><code>## &#39;select()&#39; returned 1:1 mapping between keys and columns</code></pre>
 <pre><code>##         GOID                               TERM
 ## 1 GO:0005622 intracellular anatomical structure</code></pre>
-<p>The TxDb we made earlier can also be used in this way.</p>
+</div>
+<div id="transcript-database-objects" class="section level2" number="12.2">
+<h2 number="12.2"><span class="header-section-number">12.2</span> Transcript database objects</h2>
+<p>We’ve been using our genomic features as one big unstructured GRanges. This is messy. TxDb objects offer a more structured representation of genes, transcripts, exons, and coding sequences.</p>
+<pre class="r"><code>library(GenomicFeatures)</code></pre>
+<pre><code>## Warning: package &#39;GenomicFeatures&#39; was built under R version 4.1.1</code></pre>
+<pre class="r"><code>txdb &lt;- makeTxDbFromGRanges(features)
+txdb</code></pre>
+<pre><code>## TxDb object:
+## # Db type: TxDb
+## # Supporting package: GenomicFeatures
+## # Genome: NA
+## # Nb of transcripts: 61451
+## # Db created by: GenomicFeatures package from Bioconductor
+## # Creation time: 2021-09-05 09:57:31 +1000 (Sun, 05 Sep 2021)
+## # GenomicFeatures version at creation time: 1.45.2
+## # RSQLite version at creation time: 2.2.8
+## # DBSCHEMAVERSION: 1.2</code></pre>
+<p><code>txdb</code> is a “TxDb” object. Some ways to extract data from a TxDb are:</p>
+<pre class="r"><code>genes(txdb)
+transcriptsBy(txdb, by=&quot;gene&quot;)
+exonsBy(txdb, use.names=TRUE)
+cdsBy(txdb, use.names=TRUE)
+
+cds_ranges &lt;- cdsBy(txdb, use.names=TRUE)
+cds_ranges$B0228.5a.1
+cds_ranges[[&quot;B0228.5a.1&quot;]]
+unlist(cds_ranges)</code></pre>
+<p><code>cds_ranges</code> here is a “GRangesList”. That is, a list containing GRanges objects. To get the transcript sequence or the coding sequence, these each need to be retrieved and then concatenated together. <code>extractTranscriptSeqs()</code> can do this for us.</p>
+<pre class="r"><code>extractTranscriptSeqs(seqs, cds_ranges)</code></pre>
+<pre><code>## DNAStringSet object of length 33552:
+##         width seq                                           names               
+##     [1]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.3
+##     [2]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.1
+##     [3]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.4
+##     [4]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.5
+##     [5]   372 ATGAAACTCGTAATTCTGCTA...GCTCGTAATCAATTCCAATAA Y74C9A.2a.2
+##     ...   ... ...
+## [33548]  1227 TTGTTAGAATTTCTTTTTATC...TTTTGATTAAGTGTGTTTTAC MTCE.25.1
+## [33549]  1575 ATTAATCTTTATAAAAAATAT...AGAACTACTAGATTAAAAAAT MTCE.26.1
+## [33550]   693 ATTAATAATTTTTTTCAAGGA...TGATGTTTTGGTACTATAGAA MTCE.31.1
+## [33551]   333 ATTTTAGTGCTATTAATAGTT...GGTAAATTAGTTTGAGTAATT MTCE.34.1
+## [33552]  1581 ATTAATATTTCTATTTTTTTG...TTTATTTTTTTTATAATTTGT MTCE.35.1</code></pre>
+<p>A TxDb can also be accessed like an AnnotationDb.</p>
 <pre class="r"><code>keytypes(txdb) </code></pre>
 <pre><code>## [1] &quot;CDSID&quot;    &quot;CDSNAME&quot;  &quot;EXONID&quot;   &quot;EXONNAME&quot; &quot;GENEID&quot;   &quot;TXID&quot;     &quot;TXNAME&quot;</code></pre>
 <pre class="r"><code>columns(txdb)</code></pre>
@@ -2379,9 +2378,10 @@ unlist(cds_ranges)</code></pre>
 <pre class="r"><code>DBI::dbListFields( dbconn(txdb), &quot;transcript&quot; )</code></pre>
 <pre><code>## [1] &quot;_tx_id&quot;    &quot;tx_name&quot;   &quot;tx_type&quot;   &quot;tx_chrom&quot;  &quot;tx_strand&quot; &quot;tx_start&quot; 
 ## [7] &quot;tx_end&quot;</code></pre>
+<p>There’s much more to explore here. Have a look at the documentation for the <code>GenomicFeatures</code> and <code>ensembldb</code> packages. To annotate a set of genomic features such as peaks from a ChIP-seq experiment, see for example the <code>ChIPseeker</code> package.</p>
 </div>
-<div id="biomart" class="section level2" number="13.2">
-<h2 number="13.2"><span class="header-section-number">13.2</span> biomaRt</h2>
+<div id="biomart" class="section level2" number="12.3">
+<h2 number="12.3"><span class="header-section-number">12.3</span> biomaRt</h2>
 <p><a href="http://www.biomart.org/">BioMart</a> servers accessed using the <code>biomaRt</code> package are another way to get information such as translation of gene ids, gene sets, and gene information. For reproducibility, if using the ENSEMBL servers, make sure to specify a specific version of Ensembl to use. Your scripts may fail in future if the server you are using goes down or changes how it is accessed.</p>
 <pre class="r"><code>library(biomaRt)
 
@@ -2391,8 +2391,8 @@ getBM(
     attributes=c(&quot;external_gene_name&quot;, &quot;ensembl_gene_id&quot;, &quot;entrezgene_id&quot;), 
     filters=&quot;external_gene_name&quot;, values=&quot;trx-1&quot;, mart=mart)</code></pre>
 </div>
-<div id="annotationhub" class="section level2" number="13.3">
-<h2 number="13.3"><span class="header-section-number">13.3</span> AnnotationHub</h2>
+<div id="annotationhub" class="section level2" number="12.4">
+<h2 number="12.4"><span class="header-section-number">12.4</span> AnnotationHub</h2>
 <p>AnnotationHub is a way to retrieve data from a more comprehensive set of organisms and data providers than are provided as individual Bioconductor packages. The retrieved data is returned in an appropriate Bioconductor type. If data is being updated over time (eg improved annotation of a genome), each version receives a unique ID in AnnotationHub, making it possible to write reproducible analyses.</p>
 <p>Files are cached, so they will only be downloaded once.</p>
 <p>In the example below, the yeast genome and Ensembl annotations are retrieved:</p>
@@ -2425,8 +2425,8 @@ getSeq(sc_genome, as(&quot;IV:1-10&quot;,&quot;GRanges&quot;))
 import(sc_genome)</code></pre>
 </div>
 </div>
-<div id="package-versions-used" class="section level1" number="14">
-<h1 number="14"><span class="header-section-number">14</span> Package versions used</h1>
+<div id="package-versions-used" class="section level1" number="13">
+<h1 number="13"><span class="header-section-number">13</span> Package versions used</h1>
 <p>Use <code>sessionInfo()</code> to check the versions of packages used.</p>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 4.1.0 (2021-05-18)
@@ -2445,7 +2445,7 @@ import(sc_genome)</code></pre>
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] GO.db_3.13.0           org.Ce.eg.db_3.13.0    GenomicFeatures_1.45.2
+##  [1] GenomicFeatures_1.45.2 GO.db_3.13.0           org.Ce.eg.db_3.13.0   
 ##  [4] AnnotationDbi_1.55.1   Biobase_2.53.0         seqLogo_1.59.0        
 ##  [7] Gviz_1.37.2            BSgenome_1.61.0        rtracklayer_1.53.1    
 ## [10] GenomicRanges_1.45.0   Biostrings_2.61.2      GenomeInfoDb_1.29.4   

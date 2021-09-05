@@ -128,6 +128,21 @@ Bioconductor uses "S4" types, including it's own data frame (`DataFrame`) and li
 (do workshop)
 
 
+## Genome browsers
+
+On the web:
+
+* [UCSC](https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr13%3A32868568%2D32994857&hgsid=1052205095_AaqJoeemFT7StcNxT3Cxn3TgBT0N)
+* [Ensembl](https://asia.ensembl.org/Homo_sapiens/Location/View?db=core;g=ENSG00000139618;r=13:32313383-32401971)
+
+On your desktop:
+
+* [Integrative Genomics Viewer](https://software.broadinstitute.org/software/igv/)
+    * Can view many file types. 
+    * View very large files such as [BAM](https://samtools.github.io/hts-specs/) or [bigWig](https://genome.ucsc.edu/goldenPath/help/bigWig.html).
+
+<img src="igv.png" width="1000">
+
 ## Files in bioinformatics
 
 | What|File types|R types|
@@ -222,68 +237,6 @@ As well as the chromosomes in the "primary assembly" a genome assembly may have 
 &nbsp;• alt loci: a way to represent alleles, genetic diversity in the species
 </span></span>
 
-## Genome browsers
-
-On the web:
-
-* [UCSC](https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr13%3A32868568%2D32994857&hgsid=1052205095_AaqJoeemFT7StcNxT3Cxn3TgBT0N)
-* [Ensembl](https://asia.ensembl.org/Homo_sapiens/Location/View?db=core;g=ENSG00000139618;r=13:32313383-32401971)
-
-On your desktop:
-
-* [Integrative Genomics Viewer](https://software.broadinstitute.org/software/igv/)
-    * Can view many file types. 
-    * View very large files such as [BAM](https://samtools.github.io/hts-specs/) or [bigWig](https://genome.ucsc.edu/goldenPath/help/bigWig.html).
-
-<img src="igv.png" width="1000">
-
-
-## Command-line bioinformatics software
-
-Not all bioinformatics software is an R package!
-
-R's role will often be to massage your data into the form needed for command line tools, or to examine a tool's output.
-
-<br>
-
-One way to install command-line software is using the Conda package manager:
-
-* [Install miniconda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
-* Use the [bioconda](https://anaconda.org/bioconda) channel
-
-```
-# Example
-conda install -c bioconda meme
-```
-
-* Can be used on your own computer, or on a server or cluster.
-* Doesn't need admin rights.
-
-
 ##
 
-(continue workshop)
-
-
-## Using Bioconductor
-
-1. Find some useful packages
-1. Read the vignettes
-1. Read the reference documentation for specific functions you need
-1. If you run into a funny class, check its documentation, work out the accessor functions, and in a pinch poke around its internals with `@` or try `as.data.frame`.
-
-```{r eval=F}
-?"GRanges-class"
-
-methods(class="GRanges")
-```
-
-<br>
-
-* The [Bioconductor website](https://bioconductor.org) includes material from many and various tutorials/vignettes/workflows
-* [Most downloaded Bioconctor packages](http://bioconductor.org/packages/stats/)
-* [Mike Love's Bioconductor cheat sheet](https://github.com/mikelove/bioc-refcard/blob/master/README.Rmd)
-* [plyranges](https://bioconductor.org/packages/release/bioc/html/plyranges.html) provides a "tidy" way of working with GRanges with many powerful features, developed by Dr. Stuart Lee at Monash. [A plyranges workshop](https://bioconductor.github.io/BiocWorkshops/fluent-genomic-data-analysis-with-plyranges.html)
-* [Bioconductor's Stack-Overflow-style support site](https://support.bioconductor.org/)
-
-
+(return to workshop)

@@ -299,8 +299,8 @@ Our ENSEMBL sequences match "ce11", also called "WBcel235". However the chromoso
 The metadata columns let us query the GRanges, for example for a feature type:
 
 ```{r results="hold"}
-cds <- subset(features, type == "CDS")
-cds
+subset(features, type == "CDS")
+
 # Equivalently:
 #   features[features$type == "CDS"]
 ```
@@ -576,44 +576,10 @@ Filtered import of a BAM file can be performed with a suitable use of `ScanBamPa
 Try loading the "motif-matches.gff", "example.bam", and "depth.bw" files into IGV. Look for example at gene "rps-12".
 
 
-
-# Transcript database objects
-
-We've been using our genomic features as one big unstructured GRanges. This is messy. TxDb objects offer a more structured representation of genes, transcripts, exons, and coding sequences.
-
-```{r}
-library(GenomicFeatures)
-
-txdb <- makeTxDbFromGRanges(features)
-txdb
-```
-
-`txdb` is a "TxDb" object. Some ways to extract data from a TxDb are:
-
-```{r results="hide"}
-genes(txdb)
-transcriptsBy(txdb, by="gene")
-exonsBy(txdb, use.names=TRUE)
-cdsBy(txdb, use.names=TRUE)
-
-cds_ranges <- cdsBy(txdb, use.names=TRUE)
-cds_ranges$B0228.5a.1
-cds_ranges[["B0228.5a.1"]]
-unlist(cds_ranges)
-```
-
-`cds_ranges` here is a "GRangesList". That is, a list containing GRanges objects. To get the transcript sequence or the coding sequence, these each need to be retrieved and then concatenated together. `extractTranscriptSeqs()` can do this for us.
-
-```{r}
-extractTranscriptSeqs(seqs, cds_ranges)
-```
-
-There's much more to explore here. Have a look at the documentation for the `GenomicFeatures` and `ensembldb` packages. To annotate a set of genomic features such as peaks from a ChIP-seq experiment, see for example the `ChIPseeker` package.
+(return to slideshow)
 
 
 # Genome and annotation resources
-
-(return to slideshow)
 
 Besides software, Bioconductor includes various types of reference data.
 
@@ -648,7 +614,39 @@ AnnotationDbi::select(GO.db,
     keys="GO:0005622", keytype="GOID", columns="TERM")
 ```
 
-The TxDb we made earlier can also be used in this way.
+
+## Transcript database objects
+
+We've been using our genomic features as one big unstructured GRanges. This is messy. TxDb objects offer a more structured representation of genes, transcripts, exons, and coding sequences.
+
+```{r}
+library(GenomicFeatures)
+
+txdb <- makeTxDbFromGRanges(features)
+txdb
+```
+
+`txdb` is a "TxDb" object. Some ways to extract data from a TxDb are:
+
+```{r results="hide"}
+genes(txdb)
+transcriptsBy(txdb, by="gene")
+exonsBy(txdb, use.names=TRUE)
+cdsBy(txdb, use.names=TRUE)
+
+cds_ranges <- cdsBy(txdb, use.names=TRUE)
+cds_ranges$B0228.5a.1
+cds_ranges[["B0228.5a.1"]]
+unlist(cds_ranges)
+```
+
+`cds_ranges` here is a "GRangesList". That is, a list containing GRanges objects. To get the transcript sequence or the coding sequence, these each need to be retrieved and then concatenated together. `extractTranscriptSeqs()` can do this for us.
+
+```{r}
+extractTranscriptSeqs(seqs, cds_ranges)
+```
+
+A TxDb can also be accessed like an AnnotationDb.
 
 ```{r}
 keytypes(txdb) 
@@ -661,6 +659,8 @@ Under the hood these are all SQLite databases. `select()` joins tables together 
 DBI::dbListTables( dbconn(txdb) )
 DBI::dbListFields( dbconn(txdb), "transcript" )
 ```
+
+There's much more to explore here. Have a look at the documentation for the `GenomicFeatures` and `ensembldb` packages. To annotate a set of genomic features such as peaks from a ChIP-seq experiment, see for example the `ChIPseeker` package.
 
 
 ## biomaRt 

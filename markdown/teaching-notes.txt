@@ -1,0 +1,28 @@
+
+2021-09-04 Practice run
+
+"Since you all have different backgrounds, some of this may be things you know. I'm hoping there will alls be plenty of parts that are new to you. Bioconductor has many useful features that are hard to discover. There may also be things I go through too quickly. Please ask a question if I do that."
+
+Introductory slideshow.   ~ 13 minutes.
+Breakout, problem fixing. ~ 10 minutes
+Sequences.                ~ 14 minutes.
+Breakout, challenge.      ~ 10 minutes.
+Genomic ranges.           ~ 14 minutes.
+Loading files.            ~ 9  minutes.
+Seqinfo.                  ~ 7  minutes.
+Querying GRanges.         ~ 3 minutes.
+Representation of genes.  ~ 6 minutes.
+Further operations.       ~ 15 minutes.
+Breakout, challenge.      ~ 20 minutes.
+PAS.                      ~ 16 minutes.
+BAMs and bigWigs.         ~ 8 minutes.
+Further slideshow.        ~ 14 minutes. 
+Annotation resources.     ~ 26 minutes.
+
+Total:                    ~ 185 minutes.
+
+Allow hourly breaks.
+
+If behind time, reference data can be covered only briefly.
+
+Finish up with "Further reading".

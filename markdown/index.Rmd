@@ -63,6 +63,7 @@ BiocManager::install(c(
 # http://ftp.ensembl.org/pub/release-104/gtf/caenorhabditis_elegans/Caenorhabditis_elegans.WBcel235.104.gtf.gz
 ```
 
+<br>
 
 ## Further reading
 
@@ -72,11 +73,15 @@ BiocManager::install(c(
 
 * The [plyranges](https://bioconductor.org/packages/release/bioc/html/plyranges.html) package by Stuart Lee provides a "tidy" approach to GRanges. Stuart has also written an introduction to [S4 classes](https://stuartlee.org/2019/07/09/s4-short-guide/).
 
+* [Mike Love's Bioconductor reference card](https://github.com/mikelove/bioc-refcard) has many useful code snippets.
+
 * James MacDonald and Lori Sheppard gave an introduction to Bioconductor annotation resources at Bioc2021: [video](https://www.youtube.com/watch?v=3ABBm7BZszI), [workshop material](https://jmacdon.github.io/Bioc2021Anno/articles/AnnotationWorkshop.html). Includes discussion of Bioconductor's history.
 
 * [Course materials and videos](https://bioconductor.org/help/course-materials/) are regularly added to the Bioconductor site.
 
 * [Ask questions on the support site.](https://support.bioconductor.org/) (Remember to check if your question has [already been answered](https://support.bioconductor.org/post/search/?query=limma+batch).)
+
+<br>
 
 ## Author
 
@@ -88,6 +93,4 @@ This course has been developed for the [Monash Bioinformatics Platform](https://
 
 * [GitHub repository](https://github.com/MonashDataFluency/r-bioc-2)
 
-<p style="margin-top: 5em; text-align: right">
 <a href="https://www.monash.edu/researchinfrastructure/bioinformatics"><img src="MBP-banner.png" width="675"></a>
-</p>
