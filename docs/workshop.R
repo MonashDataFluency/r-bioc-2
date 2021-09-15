@@ -285,7 +285,7 @@ Seqinfo(genome="ce11")
 #
 # Our ENSEMBL sequences match "ce11", also called "WBcel235". However
 # the chromosome names are slightly different, a common source of pain.
-# See ?seqlevelsStyle().
+# See ?seqlevelsStyle.
 
 
 
@@ -569,14 +569,16 @@ export(matches, "motif-matches.gff", index=TRUE)
 #
 # import() can read various other file types. This section will
 # demonstrate reading read alignments from a BAM file and producing a
-# bigWig depth of coverage file. The reads in the BAM file used here are
+# bigWig depth of coverage file. The reads in the BAM file used here is
 # a small sample from GSE57993 sample "N2 Rep1".
 # https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE57993
 #
 # Both BAM and bigWig files are designed so that specific regions can be
 # accessed efficiently. Genome browsers can use this to only load data
-# as needed. Bioconductor packages will also usually offer some way to
-# load specific regions. This is useful because these files can be very
+# as needed. BigWig files also contain versions of their data at
+# different resolutions, so a zoomed-out view can be quickly loaded.
+# Bioconductor packages will also usually offer some way to load
+# specific regions. This is useful because these files can be very
 # large.
 
 alignments <- import("example.bam")
@@ -598,7 +600,8 @@ export(depth, "depth.bw")
 # conventional vector with as.numeric().
 #
 # Filtered import of a BAM file can be performed with a suitable use of
-# ScanBamParam, import(bam, param=ScanBamParam( ... )):
+# ScanBamParam from the Rsamtools package, import("example.bam",
+# param=ScanBamParam( ... )).
 #
 # * Specific strand.
 # * Specific region of reference genome.
