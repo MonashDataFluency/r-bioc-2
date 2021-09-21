@@ -70,9 +70,11 @@ BiocManager::install(c(
 
 * Most of the [packages](https://bioconductor.org/packages/release/BiocViews.html#___Software) used in this workshop have useful vignettes.
 
+* There are [workflow](https://www.bioconductor.org/packages/release/BiocViews.html#___Workflow) tutorials with step-by-step instructions for specific analysis tasks.
+
 * The [file format FAQ](https://genome.ucsc.edu/FAQ/FAQformat.html) by UCSC. Mentioned in this workshop are GTF, GFF, BAM, bigWig. Also see [FASTA](https://en.wikipedia.org/wiki/FASTA_format) for sequences. [samtools and related tools](http://www.htslib.org/) can make an index for many of these file types, for fast access by genome browsers and other software.
 
-* The [plyranges](https://bioconductor.org/packages/release/bioc/html/plyranges.html) package by Stuart Lee provides a "tidy" approach to GRanges. Stuart has also written an introduction to [S4 classes](https://stuartlee.org/2019/07/09/s4-short-guide/).
+* The [plyranges](https://bioconductor.org/packages/release/bioc/html/plyranges.html) package by Stuart Lee provides a "tidy" approach to GRanges. Stuart has also written an [introduction to S4 classes](https://stuartlee.org/2019/07/09/s4-short-guide/).
 
 * [Mike Love's Bioconductor reference card](https://github.com/mikelove/bioc-refcard) has many useful code snippets.
 

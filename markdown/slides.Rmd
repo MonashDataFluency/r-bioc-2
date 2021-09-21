@@ -13,7 +13,7 @@ output:
 
 <br>
 
-Bioconductor is repository for R packages relating to high-throughput biology (shotgun sequencing, microarrays, etc).
+Bioconductor is a repository for R packages relating to high-throughput biology (shotgun sequencing, microarrays, etc).
 
 * Started in 2001, has developed alongside technology and growth of data
 
@@ -64,7 +64,7 @@ eg for ChIP-seq, ATAC-seq, variant calling
 **Differential testing of microarray, RNA-seq, and other high-throughput data**
 
 * `SummarizedExperiment`, `limma`, `edgeR`, `DESeq2`, ...
-* Further packages to normalize, impute, batch correct, check quality, ...
+* Further packages to normalize, impute, batch correct, ...
 <br>
 
 **Single-cell gene expression, etc**
@@ -114,7 +114,7 @@ Most base R packages use "S3" types. Data frames, tibbles, and linear model fits
 
 ### 👉👉&nbsp;&nbsp;S4 types
 
-Bioconductor uses "S4" types, including it's own data frame (`DataFrame`) and list types (`SimpleList`, `GRangesList`, etc etc). If stuck, can almost always convert to base R types with `as.data.frame()`, `as.list()`, `as.character()`, `as.numeric()`, `as()`.
+Bioconductor uses "S4" types, including its own data frame (`DataFrame`) and list types (`SimpleList`, `GRangesList`, etc etc). If stuck, can almost always convert to base R types with `as.data.frame()`, `as.list()`, `as.character()`, `as.numeric()`, `as()`.
 
 * use accessor functions such as `seqnames`, `start`, `end`, `width`, `nchars`
 * if absolutely necessary, peek inside with `@`
