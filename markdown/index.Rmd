@@ -35,10 +35,11 @@ filenames <- c(
     "example.bam",
     "example.bam.bai")
 
-download.file(
-    paste0("https://monashdatafluency.github.io/r-bioc-2/", filenames),
-    filenames)
-
+for(filename in filenames) {
+    download.file(
+        paste0("https://monashdatafluency.github.io/r-bioc-2/", filename),
+        filename)
+}
 
 # Install packages used in workshop
 install.packages("BiocManager")
