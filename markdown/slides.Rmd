@@ -103,18 +103,18 @@ Using Bioconductor will mean building familiarity with further types:
 
 ## 
 
-### ✋&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S3 types
+### ✋&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S3 classes
 
-Most base R packages use "S3" types. Data frames, tibbles, and linear model fits are examples of these.
+Most base R packages use "S3" classes. Examples include `data.frame`, `tibble`, and linear model fits.
 
 * usually a `list` vector underneath
 * if necessary, peek inside with `$`
 
 <br>
 
-### 👉👉&nbsp;&nbsp;S4 types
+### 👉👉&nbsp;&nbsp;S4 classes
 
-Bioconductor uses "S4" types, including its own data frame (`DataFrame`) and list types (`SimpleList`, `GRangesList`, etc etc). If stuck, can almost always convert to base R types with `as.data.frame()`, `as.list()`, `as.character()`, `as.numeric()`, `as()`.
+Bioconductor uses "S4" classes, including novel classes such as `GRanges` and S4 equivalents of familiar classes such as `DataFrame`. Can usually convert to base R types with `as.data.frame()`, `as.list()`, `as.character()`, `as.numeric()`, `as()`.
 
 * use accessor functions such as `seqnames`, `start`, `end`, `width`, `nchars`
 * if absolutely necessary, peek inside with `@`
@@ -134,12 +134,12 @@ On the web:
 
 * [UCSC](https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr13%3A32868568%2D32994857&hgsid=1052205095_AaqJoeemFT7StcNxT3Cxn3TgBT0N)
 * [Ensembl](https://asia.ensembl.org/Homo_sapiens/Location/View?db=core;g=ENSG00000139618;r=13:32313383-32401971)
+* etc
 
 On your desktop:
 
 * [Integrative Genomics Viewer](https://software.broadinstitute.org/software/igv/)
-    * Can view many file types. 
-    * View very large files such as [BAM](https://samtools.github.io/hts-specs/) or [bigWig](https://genome.ucsc.edu/goldenPath/help/bigWig.html).
+    * Can view many file types, and very large files such as [BAM files](https://samtools.github.io/hts-specs/).
 
 <img src="igv.png" width="1000">
 
