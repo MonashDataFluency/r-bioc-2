@@ -459,7 +459,9 @@ look( reduce(trx1_exons) )
 look( disjoin(trx1_exons) )
 
 # 9.3 Challenge: transcript initiation ----
-#
+
+transcripts <- subset(features, type == "transcript")
+
 # 1. Make a GRanges of all transcripts with a biotype of
 # "protein_coding".
 #

@@ -447,6 +447,10 @@ look( disjoin(trx1_exons) )
 
 ## Challenge: transcript initiation {.challenge}
 
+```{r}
+transcripts <- subset(features, type == "transcript")
+```
+
 1. Make a GRanges of all transcripts with a biotype of "protein_coding".
 
 2. Make a GRanges of the two bases immediately preceding each of these transcripts.
