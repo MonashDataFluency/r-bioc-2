@@ -37,7 +37,7 @@ We tried to get people to use their own computers, but provided a server as back
 
 The setup time and taking time at the start of the workshop to ensure everyone has a working RStudio session sets a good tone for the workshop, and also serves as a bit of an icebreaker.
 
-At the second hour we had just started "Further operations on GRanges". 
+At the end of the second hour we had just started "Further operations on GRanges". 
 
 We did make sure to do the second challenge (15 minutes breakout-room time), and attendees seemed to get good value out of this.
 
