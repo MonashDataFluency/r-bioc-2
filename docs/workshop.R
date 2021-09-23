@@ -487,7 +487,7 @@ look( disjoin(trx1_exons) )
 # We suspect there is some motif that causes cleavage and
 # polyadenylation of RNA transcripts, close to the 3' end of each
 # transcript. Bioconductor will let us explore sequence around the ends
-# of transcripts. It can also serve as to prepare data for command-line
+# of transcripts. It can also help prepare data for command-line
 # software such as the MEME Suite.
 #
 # We'll limit our attention to protein coding transcripts.
@@ -592,12 +592,12 @@ plot(depth$III[5679200:5680200], type="l")
 
 export(depth, "depth.bw")
 
-# Explore the documentation for "GenomicAlignments", "Rle", and
-# "RleList". "Rle" and "RleList" objects are memory-efficient vectors
-# and lists of vectors. They support arithmetic operation such as
-# scaling with * and adding with +. Rather neat! Sometimes a function
-# won't support "Rle"s. When this happens, an Rle can be converted to a
-# conventional vector with as.numeric().
+# Explore the documentation for "GAlignments", "Rle", and "RleList".
+# "Rle" and "RleList" objects are memory-efficient vectors and lists of
+# vectors. They support arithmetic operation such as scaling with * and
+# adding with +. Rather neat! Sometimes a function won't support "Rle"s.
+# When this happens, an Rle can be converted to a conventional vector
+# with as.numeric().
 #
 # Filtered import of a BAM file can be performed with a suitable use of
 # ScanBamParam from the Rsamtools package, import("example.bam",

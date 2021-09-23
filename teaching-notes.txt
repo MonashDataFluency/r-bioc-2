@@ -1,5 +1,5 @@
 
-2021-09-04 Practice run
+# 2021-09-04 Practice run
 
 "Since you all have different backgrounds, some of this may be things you know. I'm hoping there will also be plenty of parts that are new. Bioconductor has many useful features that are hard to discover, and one of the points of this workshop is to show how to discover these. There may also be things I go through too quickly, please ask a question if I do that."
 
@@ -26,3 +26,25 @@ Allow hourly breaks.
 If behind time, reference data can be covered only briefly.
 
 Finish up with "Further reading".
+
+
+
+# 2021-09-23 Australian BioCommons online workshop report
+
+We allowed 15 minutes setup followed by a 3 hour workshop. This ended up being very rushed at the end: 
+
+We tried to get people to use their own computers, but provided a server as backup. Several people ended up needing this. People had problem installing some specific packages, like Gviz. While there is no dependence on very new packages in this workshop, people still seem to run into problems. (RStudio Cloud fails to install "VariantAnnotation" package, which is dependency for "Gviz", so we didn't direct people to RStudio Cloud. Google Colaboratory is a possible option, but the interface is somewhat different to RStudio.)
+
+The setup time and taking time at the start of the workshop to ensure everyone has a working RStudio session sets a good tone for the workshop, and also serves as a bit of an icebreaker.
+
+At the second hour we had just started "Further operations on GRanges". 
+
+We did make sure to do the second challenge (15 minutes breakout-room time), and attendees seemed to get good value out of this.
+
+Very rushed through "Examining the PolyAdenylation Signal". 
+
+Skipped section on "BAMs and bigWigs". 
+
+Very rushed through "Genome and annotation resources".
+
+Recommendation for next time would be a 4 hour workshop.
